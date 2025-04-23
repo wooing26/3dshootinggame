@@ -2,21 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : SingletonBehaviour<UIManager>
 {
-    public static UIManager Instance = null;
-
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
-
     public Slider           PlayerStaminaSlider;
     public Slider           BombThrowPowerSlider;
 

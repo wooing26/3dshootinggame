@@ -1,24 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombPool : MonoBehaviour
+public class BombPool : SingletonBehaviour<BombPool>
 {
-    public static BombPool      Instance;
-
     public GameObject           BombPrefab;
 
     private List<GameObject>    _bombs;
-
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
 
     public void SetPoolSize(int poolSize)
     {
