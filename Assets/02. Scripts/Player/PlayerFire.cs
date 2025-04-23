@@ -160,9 +160,18 @@ public class PlayerFire : MonoBehaviour
             BulletEffect.transform.forward = hitInfo.normal;    // 법선 벡터
             BulletEffect.Play();
 
-            // 게임 수학 : 선형대수학(스칼라, 벡터, 행렬), 기하학(삼각함수)
-
             hitPosition = hitInfo.point;
+            // 게임 수학 : 선형대수학(스칼라, 벡터, 행렬), 기하학(삼각함수)
+            if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+            {
+                Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
+                Damage damage = new Damage();
+                damage.Value = 10;
+                damage.From = this.gameObject;
+
+                enemy.TakeDamage(damage);
+            }
+
         }
         else
         {
