@@ -146,7 +146,7 @@ public class PlayerFire : MonoBehaviour
         _currentBulletCount--;
 
         // 2. 레이를 생성하고 발사 위치와 진행 방향을 설정
-        Ray ray = new Ray(FirePosition.transform.position, Camera.main.transform.forward);
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         // 3. 레이와 부딛힌 물체의 정보를 저장할 변수를 생성
         RaycastHit hitInfo = new RaycastHit();
 
@@ -167,6 +167,7 @@ public class PlayerFire : MonoBehaviour
                 Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
                 Damage damage = new Damage();
                 damage.Value = 10;
+                damage.KnockBackPower = 10f;
                 damage.From = this.gameObject;
 
                 enemy.TakeDamage(damage);

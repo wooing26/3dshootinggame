@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 // 1. 상태를 열거형으로 정의한다.
 public enum EnemyState
 {
     Idle,
+    Patrol,
     Trace,
     Return,
     Attack,
@@ -34,12 +36,27 @@ public class Enemy : MonoBehaviour
     public int                      Health = 100;                       // 체력
     public float                    DamagedTime = 0.5f;
     public float                    DeathTime = 2f;
+    private Vector3                 _knockBackDir;
+    private float                   _knockBackPower;
+
+    public float                    IdleWaitTime= 2f;
+    private float                   _idleTimer = 0f;
+
+    public Transform[]              PatrolTransforms;
+    private List<Vector3>           _patrolPositions;
+    private int                     _patrolIndex = 0;
 
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _startPosition = transform.position;
+
+        _patrolPositions = new List<Vector3>(PatrolTransforms.Length);
+        foreach(Transform transform in PatrolTransforms)
+        {
+            _patrolPositions.Add(transform.position);
+        }
     }
 
     private void Update()
@@ -49,6 +66,11 @@ public class Enemy : MonoBehaviour
             case EnemyState.Idle:
             {
                 Idle();
+                break;
+            }
+            case EnemyState.Patrol:
+            {
+                Patrol();
                 break;
             }
             case EnemyState.Trace:
@@ -64,6 +86,11 @@ public class Enemy : MonoBehaviour
             case EnemyState.Attack:
             {
                 Attack();
+                break;
+            }
+            case EnemyState.Damaged:
+            {
+                Damaged();
                 break;
             }
         }
@@ -90,6 +117,9 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        Vector3 dir = (transform.position - damage.From.transform.position).normalized;
+        _knockBackPower = damage.KnockBackPower;
+        _knockBackDir = dir;
         Debug.Log($"상태 전환 : {CurrentState} -> Damaged");
 
         CurrentState = EnemyState.Damaged;
@@ -100,12 +130,47 @@ public class Enemy : MonoBehaviour
     private void Idle()
     {
         // 행동 : 가만히 있는다.
-
         if (Vector3.Distance(transform.position, _player.transform.position) <= FindDistance)
         {
             Debug.Log("상태전환 : Idle -> Trace");
             CurrentState = EnemyState.Trace;
+            _idleTimer = 0f;
+            return;
         }
+
+        _idleTimer += Time.deltaTime;
+        if (_idleTimer >= IdleWaitTime)
+        {
+            Debug.Log("상태전환 : Idle -> Patrol");
+            CurrentState = EnemyState.Patrol;
+            _idleTimer = 0f;
+            return;
+        }
+    }
+
+    private void Patrol()
+    {
+        // 순찰 구역 가면 다시 Idle 상태로 변환
+        if (Vector3.Distance(transform.position, _patrolPositions[_patrolIndex]) <= ReturnDistance)
+        {
+            Debug.Log("상태전환 : Patrol -> Idle");
+            transform.position = _patrolPositions[_patrolIndex];
+            CurrentState = EnemyState.Idle;
+            _patrolIndex = (_patrolIndex + 1) % _patrolPositions.Count;
+            return;
+        }
+
+        // 중간에 플레이어 찾으면 Trace로 변경
+        if (Vector3.Distance(transform.position, _player.transform.position) <= FindDistance)
+        {
+            Debug.Log("상태전환 : Patrol -> Trace");
+            CurrentState = EnemyState.Trace;
+            return;
+        }
+
+        // 순찰 구역으로 이동
+        Vector3 dir = (_patrolPositions[_patrolIndex] - transform.position).normalized;
+        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
     }
 
     private void Trace()
@@ -173,6 +238,11 @@ public class Enemy : MonoBehaviour
             Debug.Log("Attack");
             _attackTimer = 0f;
         }
+    }
+
+    private void Damaged()
+    {
+        _characterController.Move(_knockBackDir * _knockBackPower * Time.deltaTime);
     }
 
     private IEnumerator Damaged_Coroutine()
