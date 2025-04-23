@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
 
     // 구현 순서 : 
 
-    private void Update()
+    private void LateUpdate()
     {
         Jump();
         Move();   
