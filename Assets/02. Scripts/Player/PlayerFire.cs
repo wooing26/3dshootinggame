@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerFire : MonoBehaviour
@@ -31,6 +32,14 @@ public class PlayerFire : MonoBehaviour
 
     // 목표 : 마우스의 왼쪽 버튼을 누르면 카메라가 바라보는 방향으로 총을 발사하고 싶다.
     public ParticleSystem   BulletEffect;
+
+    private LineRenderer    _bulletLineRenderer;
+    public float            BulletLineLength = 15f;
+
+    private void Awake()
+    {
+        _bulletLineRenderer = GetComponent<LineRenderer>();
+    }
 
 
     private void Start()
@@ -143,6 +152,7 @@ public class PlayerFire : MonoBehaviour
 
         // 4. 레이를 발사한 다음,
         bool isHit = Physics.Raycast(ray, out hitInfo);
+        Vector3 hitPosition = new Vector3();
         if (isHit)  // 데이터가 있다면(부딛혔다면)
         {
             // 피격 이펙트 생성(표시)
@@ -151,9 +161,29 @@ public class PlayerFire : MonoBehaviour
             BulletEffect.Play();
 
             // 게임 수학 : 선형대수학(스칼라, 벡터, 행렬), 기하학(삼각함수)
+
+            hitPosition = hitInfo.point;
+        }
+        else
+        {
+            hitPosition = FirePosition.transform.position + Camera.main.transform.forward * BulletLineLength;
         }
 
+        StartCoroutine(ShotEffect(hitPosition));
+
         UIManager.Instance.RefreshBulletText(_currentBulletCount, MaxBulletCount);
+    }
+
+    private IEnumerator ShotEffect(Vector3 hitPosition)
+    {
+        _bulletLineRenderer.SetPosition(0, FirePosition.transform.position);
+
+        _bulletLineRenderer.SetPosition(1, hitPosition);
+        _bulletLineRenderer.enabled = true;
+
+
+        yield return new WaitForSeconds(0.03f);
+        _bulletLineRenderer.enabled = false;
     }
 
     private void Reload()
