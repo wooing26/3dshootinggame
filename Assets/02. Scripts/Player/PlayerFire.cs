@@ -165,17 +165,16 @@ public class PlayerFire : MonoBehaviour
 
             hitPosition = hitInfo.point;
             // 게임 수학 : 선형대수학(스칼라, 벡터, 행렬), 기하학(삼각함수)
-            if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+            IDamageable damagedEntity = hitInfo.collider.GetComponent<IDamageable>();
+            if (damagedEntity != null)
             {
-                Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
                 Damage damage = new Damage();
                 damage.Value = 10;
                 damage.KnockBackPower = 10f;
                 damage.From = this.gameObject;
 
-                enemy.TakeDamage(damage);
+                damagedEntity.TakeDamage(damage);
             }
-
         }
         else
         {
