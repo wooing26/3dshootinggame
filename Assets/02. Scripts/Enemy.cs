@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 // 1. 상태를 열거형으로 정의한다.
 public enum EnemyState
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
     // 1. 플레이어(위치)
     private GameObject              _player;                            // 플레이어
     private CharacterController     _characterController;               // 캐릭터 컨트롤러
+    private NavMeshAgent            _agent;                             // 네비메시 에이전트
     private Vector3                 _startPosition;                     // 시작 위치
 
     // 2. Distance
@@ -48,6 +50,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.speed = MoveSpeed;
+
+
         _characterController = GetComponent<CharacterController>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _startPosition = transform.position;
@@ -169,8 +175,9 @@ public class Enemy : MonoBehaviour
         }
 
         // 순찰 구역으로 이동
-        Vector3 dir = (_patrolPositions[_patrolIndex] - transform.position).normalized;
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        // Vector3 dir = (_patrolPositions[_patrolIndex] - transform.position).normalized;
+        // _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _agent.SetDestination(_patrolPositions[_patrolIndex]);
     }
 
     private void Trace()
@@ -192,8 +199,9 @@ public class Enemy : MonoBehaviour
         }
 
         // 행동 : 플레이어를 추적한다.
-        Vector3 dir = (_player.transform.position - transform.position).normalized;
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //Vector3 dir = (_player.transform.position - transform.position).normalized;
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _agent.SetDestination(_player.transform.position);
     }
 
     private void Return()
@@ -216,8 +224,9 @@ public class Enemy : MonoBehaviour
         }
 
         // 행동 :처음 자리로 되돌아간다.
-        Vector3 dir = (_startPosition - transform.position).normalized;
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //Vector3 dir = (_startPosition - transform.position).normalized;
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _agent.SetDestination(_startPosition);
     }
 
     private void Attack()
@@ -257,6 +266,8 @@ public class Enemy : MonoBehaviour
         //}
 
         // 코루틴 방식으로 변경
+        _agent.isStopped = true;
+        _agent.ResetPath();
         yield return new WaitForSeconds(DamagedTime);
         Debug.Log("상태전환 : Damaged -> Trace");
         CurrentState = EnemyState.Trace;
