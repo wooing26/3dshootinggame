@@ -34,6 +34,7 @@ public class BombPool : SingletonBehaviour<BombPool>
                 }
 
                 bombObject.transform.position = position;
+                bombObject.transform.rotation = Quaternion.Euler(Vector3.zero);
                 bombObject.SetActive(true);
                 return bomb;
             }
