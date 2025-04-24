@@ -12,6 +12,18 @@ public class UIManager : SingletonBehaviour<UIManager>
 
     public Image            ReloadImage;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
     public void RefreshPlayerStaminaSlider(float currentStamina, float MaxStamina)
     {
         PlayerStaminaSlider.value = currentStamina / MaxStamina;
