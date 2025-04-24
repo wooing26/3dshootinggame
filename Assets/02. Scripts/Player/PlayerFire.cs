@@ -130,7 +130,10 @@ public class PlayerFire : MonoBehaviour
             return;
         }
 
+        bombRigidbody.linearVelocity = Vector3.zero;
         bombRigidbody.AddForce(Camera.main.transform.forward * _throwPower, ForceMode.Impulse);
+
+        bombRigidbody.angularVelocity = Vector3.zero;
         bombRigidbody.AddTorque(Vector3.one);
 
         _currentBombCount--;
@@ -179,8 +182,13 @@ public class PlayerFire : MonoBehaviour
             hitPosition = FirePosition.transform.position + Camera.main.transform.forward * BulletLineLength;
         }
 
+        // 타격 지점 이펙트
         StartCoroutine(ShotEffect(hitPosition));
 
+        // 총 반동
+        CameraManager.Instance.Recoil();
+
+        // UI 업데이트
         UIManager.Instance.RefreshBulletText(_currentBulletCount, MaxBulletCount);
     }
 

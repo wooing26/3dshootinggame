@@ -7,11 +7,12 @@ public class CameraFollow : MonoBehaviour
     private CameraMode  _cameraMode = CameraMode.FPS;
     
     private Transform   _target;
-    public float        TPSSpringArmLength = 15f;
+    public float        TPSSpringArmLength = 5f;
+    public Vector3      QuarterViewOffset = new Vector3(0, 15f, 0);
     public float        MoveDelayTime = 0.2f;
     private bool        _isMoveEnd = false;
 
-    private void Awake()
+    private void Start()
     {
         CameraManager.Instance.OnChangeCameraMode += ChangeCameraMode;
     }
@@ -25,7 +26,7 @@ public class CameraFollow : MonoBehaviour
         transform.DOMove(target.position, MoveDelayTime).OnComplete(() => { _isMoveEnd = true; });
     }
 
-    private void LateUpdate()
+    public void Follow()
     {
         switch (_cameraMode)
         {
@@ -37,6 +38,11 @@ public class CameraFollow : MonoBehaviour
             case CameraMode.TPS:
                 {
                     TPSFollow();
+                    break;
+                }
+            case CameraMode.QuarterView:
+                {
+                    QuarterViewFollow();
                     break;
                 }
         }
@@ -54,6 +60,16 @@ public class CameraFollow : MonoBehaviour
 
     private void TPSFollow()
     {
-        transform.DOMove(_target.position - _target.forward * TPSSpringArmLength, MoveDelayTime);
+        
+        if (_isMoveEnd)
+        {
+            transform.position = _target.position - transform.forward * TPSSpringArmLength;
+            // transform.DOMove(_target.position - transform.forward * TPSSpringArmLength, MoveDelayTime);
+        }
+    }
+
+    private void QuarterViewFollow()
+    {
+        transform.position = _target.position + QuarterViewOffset;
     }
 }
