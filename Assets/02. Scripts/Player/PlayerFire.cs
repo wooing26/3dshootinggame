@@ -149,7 +149,16 @@ public class PlayerFire : MonoBehaviour
         _currentBulletCount--;
 
         // 2. 레이를 생성하고 발사 위치와 진행 방향을 설정
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        Ray ray;
+        if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
+        {
+            ray = new Ray(FirePosition.transform.position, transform.forward);
+        }
+        else
+        {
+            ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        }
+            
         // 3. 레이와 부딛힌 물체의 정보를 저장할 변수를 생성
         RaycastHit hitInfo = new RaycastHit();
 
@@ -173,18 +182,22 @@ public class PlayerFire : MonoBehaviour
                 damage.KnockBackPower = 10f;
                 damage.From = this.gameObject;
                 damage.HitPoint = hitInfo.point;
-                damage.HitDirection = hitInfo.normal;
+                damage.HitDirection = -hitInfo.normal;
 
                 damagedEntity.TakeDamage(damage);
             }
+        }
+        else if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
+        {
+            hitPosition = FirePosition.transform.position + FirePosition.transform.forward * BulletLineLength;
         }
         else
         {
             hitPosition = FirePosition.transform.position + Camera.main.transform.forward * BulletLineLength;
         }
 
-        // 타격 지점 이펙트
-        StartCoroutine(ShotEffect(hitPosition));
+            // 타격 지점 이펙트
+            StartCoroutine(ShotEffect(hitPosition));
 
         // 총 반동
         CameraManager.Instance.Recoil();
