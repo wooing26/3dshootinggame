@@ -172,6 +172,8 @@ public class PlayerFire : MonoBehaviour
                 damage.Value = 10;
                 damage.KnockBackPower = 10f;
                 damage.From = this.gameObject;
+                damage.HitPoint = hitInfo.point;
+                damage.HitDirection = hitInfo.normal;
 
                 damagedEntity.TakeDamage(damage);
             }
