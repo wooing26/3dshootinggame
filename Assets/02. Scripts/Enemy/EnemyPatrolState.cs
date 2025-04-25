@@ -29,7 +29,7 @@ public class EnemyPatrolState : AEnemyState
         {
             Debug.Log("상태전환 : Patrol -> Idle");
             _enemy.transform.position = _patrolPositions[_patrolIndex];
-            _enemy.CurrentState = EnemyState.Idle;
+            _enemy.ECurrentState = EEnemyState.Idle;
             _patrolIndex = (_patrolIndex + 1) % _patrolPositions.Count;
             return;
         }
@@ -38,7 +38,7 @@ public class EnemyPatrolState : AEnemyState
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.FindDistance)
         {
             Debug.Log("상태전환 : Patrol -> Trace");
-            _enemy.ChangeState(EnemyState.Trace);
+            _enemy.ChangeState(EEnemyState.Trace);
             return;
         }
 

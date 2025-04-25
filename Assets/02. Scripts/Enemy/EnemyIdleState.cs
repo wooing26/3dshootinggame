@@ -23,7 +23,7 @@ public class EnemyIdleState : AEnemyState
         {
             Debug.Log("상태전환 : Idle -> Trace");
             _timer = 0f;
-            _enemy.ChangeState(EnemyState.Trace);
+            _enemy.ChangeState(EEnemyState.Trace);
             return;
         }
 
@@ -32,7 +32,7 @@ public class EnemyIdleState : AEnemyState
         {
             Debug.Log("상태전환 : Idle -> Patrol");
             _timer = 0f;
-            _enemy.ChangeState(EnemyState.Patrol);
+            _enemy.ChangeState(EEnemyState.Patrol);
             return;
         }
     }

@@ -20,7 +20,7 @@ public class EnemyReturnState : AEnemyState
         {
             Debug.Log("상태전환 : Return -> Idle");
             _enemy.transform.position = _enemy.StartPosition;
-            _enemy.ChangeState(EnemyState.Idle);
+            _enemy.ChangeState(EEnemyState.Idle);
             return;
         }
 
@@ -28,7 +28,7 @@ public class EnemyReturnState : AEnemyState
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.FindDistance)
         {
             Debug.Log("상태전환 : Return -> Trace");
-            _enemy.ChangeState(EnemyState.Trace);
+            _enemy.ChangeState(EEnemyState.Trace);
             return;
         }
 

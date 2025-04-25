@@ -21,7 +21,7 @@ public class EnemyAttackState : AEnemyState
         {
             Debug.Log("상태전환 : Attack -> Trace");
             _attackTimer = 0f;
-            _enemy.ChangeState(EnemyState.Trace);
+            _enemy.ChangeState(EEnemyState.Trace);
             return;
         }
 

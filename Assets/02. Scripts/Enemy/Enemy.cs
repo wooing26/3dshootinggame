@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.AI;
 
 // 1. 상태를 열거형으로 정의한다.
-public enum EnemyState
+public enum EEnemyState
 {
     Idle,
     Patrol,
@@ -17,18 +17,21 @@ public enum EnemyState
 public class Enemy : MonoBehaviour, IDamageable
 {
     // 2. 현재 상태를 지정한다.
-    public EnemyState                               CurrentState = EnemyState.Idle;
-    private Dictionary<EnemyState, AEnemyState>     _stateDictionary;
-    private AEnemyState                             _currentState;
+    public EEnemyState                              ECurrentState = EEnemyState.Idle;
+    private Dictionary<EEnemyState, AEnemyState>    _stateDictionary;
+    private AEnemyState                             _currentStateBehaviour;
 
     // 필요 속성
     // 1. 플레이어(위치)
     private GameObject                              _player;                            // 플레이어
     public GameObject                               Player => _player;
+    
     private CharacterController                     _characterController;               // 캐릭터 컨트롤러
+    public CharacterController                      CharacterController => _characterController;
     
     private NavMeshAgent                            _agent;                             // 네비메시 에이전트
     public NavMeshAgent                             Agent => _agent;
+    
     private Vector3                                 _startPosition;                     // 시작 위치
     public Vector3                                  StartPosition => _startPosition;
 
@@ -43,19 +46,26 @@ public class Enemy : MonoBehaviour, IDamageable
     public int                                      Health = 100;                       // 체력
     public float                                    DamagedTime = 0.5f;
     public float                                    DeathTime = 2f;
-    private Vector3                                 _knockBackDir;
-    private float                                   _knockBackPower;
+    
 
     public float                                    IdleWaitTime= 2f;
-    private float                                   _idleTimer = 0f;
 
     public Transform[]                              PatrolTransforms;
 
 
     private void Awake()
     {
-
-    }
+        _stateDictionary = new Dictionary<EEnemyState, AEnemyState>
+        {
+            { EEnemyState.Idle,      new EnemyIdleState()},
+            { EEnemyState.Patrol,    new EnemyPatrolState()},
+            { EEnemyState.Trace,     new EnemyTraceState()},
+            { EEnemyState.Return,    new EnemyReturnState()},
+            { EEnemyState.Attack,    new EnemyAttackState()},
+            { EEnemyState.Damaged,   new EnemyDamagedState()},
+            { EEnemyState.Die,       new EnemyDeadState()},
+        };
+}
 
     private void Start()
     {
@@ -66,29 +76,31 @@ public class Enemy : MonoBehaviour, IDamageable
         _characterController = GetComponent<CharacterController>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _startPosition = transform.position;
+
+        ChangeState(EEnemyState.Idle);
     }
 
     private void Update()
     {
-
-        _currentState?.Update();
+        _currentStateBehaviour?.Update();
     }
 
-    public void ChangeState(EnemyState enemyState)
+    public void ChangeState(EEnemyState enemyState)
     {
-        if (_currentState != null)
+        if (_currentStateBehaviour != null)
         {
-            _currentState.Exit();
+            _currentStateBehaviour.Exit();
         }
-        
-        _currentState = _stateDictionary[enemyState];
-        _currentState.Enter(this);
+
+        ECurrentState = enemyState;
+        _currentStateBehaviour = _stateDictionary[enemyState];
+        _currentStateBehaviour.Enter(this);
     }
 
     public void TakeDamage(Damage damage)
     {
         // 사망했거나 공격받고 있는 중이면...
-        if (CurrentState == EnemyState.Damaged || CurrentState == EnemyState.Die)
+        if (ECurrentState == EEnemyState.Damaged || ECurrentState == EEnemyState.Die)
         {
             return;
         }
@@ -98,19 +110,23 @@ public class Enemy : MonoBehaviour, IDamageable
         if (Health <= 0)
         {
 
-            Debug.Log($"상태 전환 : {CurrentState} -> Die");
+            Debug.Log($"상태 전환 : {ECurrentState} -> Die");
 
-            ChangeState(EnemyState.Damaged);
-            StartCoroutine(Die_Coroutine());
+            ChangeState(EEnemyState.Damaged);
             return;
         }
 
         Vector3 dir = (transform.position - damage.From.transform.position).normalized;
-        _knockBackPower = damage.KnockBackPower;
-        _knockBackDir = dir;
-        Debug.Log($"상태 전환 : {CurrentState} -> Damaged");
 
-        ChangeState(EnemyState.Damaged);
+        EnemyDamagedState damagedState = (EnemyDamagedState)_stateDictionary[EEnemyState.Damaged];
+        if (damagedState != null)
+        {
+            damagedState.SetKnockBack(dir, damage.KnockBackPower);
+        }
+        
+        Debug.Log($"상태 전환 : {ECurrentState} -> Damaged");
+
+        ChangeState(EEnemyState.Damaged);
         StartCoroutine(Damaged_Coroutine());
     }
 
@@ -131,13 +147,6 @@ public class Enemy : MonoBehaviour, IDamageable
         _agent.ResetPath();
         yield return new WaitForSeconds(DamagedTime);
         Debug.Log("상태전환 : Damaged -> Trace");
-        CurrentState = EnemyState.Trace;
-    }
-
-    private IEnumerator Die_Coroutine()
-    {
-        // 행동 : 죽는다.
-        yield return new WaitForSeconds(DeathTime);
-        gameObject.SetActive(false);
+        ChangeState(EEnemyState.Trace);
     }
 }
