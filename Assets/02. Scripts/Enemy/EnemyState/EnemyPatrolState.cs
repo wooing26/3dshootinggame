@@ -35,7 +35,7 @@ public class EnemyPatrolState : AEnemyState
         }
 
         // 중간에 플레이어 찾으면 Trace로 변경
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.FindDistance)
+        if (_enemy.IsPlayerInTraceRange())
         {
             Debug.Log("상태전환 : Patrol -> Trace");
             _enemy.ChangeState(EEnemyState.Trace);

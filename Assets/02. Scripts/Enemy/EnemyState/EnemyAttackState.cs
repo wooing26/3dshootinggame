@@ -7,6 +7,7 @@ public class EnemyAttackState : AEnemyState
     public override void Enter(Enemy enemy)
     {
         base.Enter(enemy);
+        _enemy.Agent.ResetPath();
     }
 
     public override void Exit()
@@ -16,8 +17,8 @@ public class EnemyAttackState : AEnemyState
 
     public override void Update()
     {
-        // 전이 : 공격 범위 만큼 가까워 지면 -> Trace
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) > _enemy.AttackDistance)
+        // 전이 : 공격 범위 만큼 멀어지면 -> Trace
+        if (!_enemy.IsPlayerInAttackRange())
         {
             Debug.Log("상태전환 : Attack -> Trace");
             _attackTimer = 0f;
@@ -30,6 +31,7 @@ public class EnemyAttackState : AEnemyState
         if (_attackTimer >= _enemy.AttackCoolTime)
         {
             Debug.Log("Attack");
+            
             _attackTimer = 0f;
         }
     }

@@ -19,7 +19,7 @@ public class EnemyIdleState : AEnemyState
     public override void Update()
     {
         // 행동 : 가만히 있는다.
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.FindDistance)
+        if (_enemy.IsPlayerInTraceRange())
         {
             Debug.Log("상태전환 : Idle -> Trace");
             _timer = 0f;

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using System;
 
 // 1. 상태를 열거형으로 정의한다.
 public enum EEnemyState
@@ -37,15 +38,17 @@ public class Enemy : MonoBehaviour, IDamageable
 
     // 2. Distance
     public float                                    FindDistance = 7f;                  // 탐지 범위
-    public float                                    ReturnDistance = 1f;                // 복귀 범위
-    public float                                    AttackDistance = 2.5f;              // 공격 범위
+    public float                                    ReturnDistance = 0.5f;              // 복귀 범위
+    public float                                    AttackDistance = 3f;                // 공격 범위
     public float                                    MoveSpeed = 3.3f;                   // 움직임 속력
 
     public float                                    AttackCoolTime = 2f;                // 공격 쿨타임
 
-    public int                                      Health = 100;                       // 체력
-    public float                                    DamagedTime = 0.5f;
+    public int                                      MaxHealth = 100;
+    private int                                     _health = 100;                     // 체력
+    public float                                    DamagedTime = 0.2f;
     public float                                    DeathTime = 2f;
+    public Action<int, int>                         OnDamaged;
     
 
     public float                                    IdleWaitTime= 2f;
@@ -65,9 +68,16 @@ public class Enemy : MonoBehaviour, IDamageable
             { EEnemyState.Damaged,   new EnemyDamagedState()},
             { EEnemyState.Die,       new EnemyDeadState()},
         };
-}
+    }
 
     private void Start()
+    {
+        Initialize();
+
+        ChangeState(EEnemyState.Idle);
+    }
+
+    protected void Initialize()
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = MoveSpeed;
@@ -76,8 +86,6 @@ public class Enemy : MonoBehaviour, IDamageable
         _characterController = GetComponent<CharacterController>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _startPosition = transform.position;
-
-        ChangeState(EEnemyState.Idle);
     }
 
     private void Update()
@@ -97,6 +105,15 @@ public class Enemy : MonoBehaviour, IDamageable
         _currentStateBehaviour.Enter(this);
     }
 
+    public virtual bool IsPlayerInTraceRange()
+    {
+        return Vector3.Distance(transform.position, _player.transform.position) <= FindDistance;
+    }
+    public bool IsPlayerInAttackRange()
+    {
+        return Vector3.Distance(transform.position, _player.transform.position) <= AttackDistance;
+    }
+
     public void TakeDamage(Damage damage)
     {
         // 사망했거나 공격받고 있는 중이면...
@@ -105,14 +122,16 @@ public class Enemy : MonoBehaviour, IDamageable
             return;
         }
 
-        Health -= damage.Value;
+        _health -= damage.Value;
+        
+        OnDamaged?.Invoke(_health, MaxHealth);
 
-        if (Health <= 0)
+        if (_health <= 0)
         {
 
             Debug.Log($"상태 전환 : {ECurrentState} -> Die");
 
-            ChangeState(EEnemyState.Damaged);
+            ChangeState(EEnemyState.Die);
             return;
         }
 

@@ -8,6 +8,7 @@ public class EnemyDeadState : AEnemyState
         base.Enter(enemy);
 
         _timer = 0f;
+        _enemy.Agent.ResetPath();
     }
 
     public override void Exit()

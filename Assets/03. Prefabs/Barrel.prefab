@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 2185749876650521719}
   - component: {fileID: 590664995633773641}
   - component: {fileID: 3088609802547151712}
-  m_Layer: 0
+  - component: {fileID: -8574319688048895024}
+  m_Layer: 9
   m_Name: Barrel
   m_TagString: Barrel
   m_Icon: {fileID: 0}
@@ -154,6 +155,25 @@ MonoBehaviour:
   Health: 30
   ExplosionEffectPrefab: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
   ExplosionRadius: 10
-  ExplosionDamage: 10
-  FlyingTime: 3
-  FlyingPower: 200
+  ExplosionDamage: 30
+  DamagedLayerMask:
+    serializedVersion: 2
+    m_Bits: 648
+  LifeTime: 3
+  FlyingPower: 50
+--- !u!208 &-8574319688048895024
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458181916529026574}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0

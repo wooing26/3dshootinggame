@@ -17,7 +17,7 @@ public class EnemyTraceState : AEnemyState
     public override void Update()
     {
         // 전이 : 공격 범위 만큼 멀어지면 -> Return
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) > _enemy.FindDistance)
+        if (!_enemy.IsPlayerInTraceRange())
         {
             Debug.Log("상태전환 : Trace -> Return");
             _enemy.ChangeState(EEnemyState.Return);
@@ -25,7 +25,7 @@ public class EnemyTraceState : AEnemyState
         }
 
         // 전이 : 공격 범위 만큼 가까워 지면 -> Attack
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.AttackDistance)
+        if (_enemy.IsPlayerInAttackRange())
         {
             Debug.Log("상태전환 : Trace -> Attack");
             _enemy.ChangeState(EEnemyState.Attack);

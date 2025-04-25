@@ -163,7 +163,7 @@ public class PlayerFire : MonoBehaviour
         RaycastHit hitInfo = new RaycastHit();
 
         // 4. 레이를 발사한 다음,
-        bool isHit = Physics.Raycast(ray, out hitInfo);
+        bool isHit = Physics.Raycast(ray, out hitInfo, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")));
         Vector3 hitPosition = new Vector3();
         if (isHit)  // 데이터가 있다면(부딛혔다면)
         {
@@ -196,8 +196,11 @@ public class PlayerFire : MonoBehaviour
             hitPosition = FirePosition.transform.position + Camera.main.transform.forward * BulletLineLength;
         }
 
-            // 타격 지점 이펙트
+        // 타격 지점 이펙트
+        if (isActiveAndEnabled)
+        {
             StartCoroutine(ShotEffect(hitPosition));
+        }
 
         // 총 반동
         CameraManager.Instance.Recoil();

@@ -10,7 +10,7 @@ public class Barrel : MonoBehaviour, IDamageable
 
     public float        ExplosionRadius = 10f;
     public int          ExplosionDamage = 10;
-    private int         _damagedLayerMask = 0;
+    public LayerMask    DamagedLayerMask;
 
     public float        LifeTime = 3f;
     public float        FlyingPower = 100f;
@@ -25,7 +25,6 @@ public class Barrel : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        _damagedLayerMask = LayerMask.GetMask("Player") | LayerMask.GetMask("Enemy");
         _isDead = false;
     }
 
@@ -42,16 +41,22 @@ public class Barrel : MonoBehaviour, IDamageable
         Debug.Log(Health);
         if (Health <= 0)
         {
-            StartCoroutine(Explosion());
+            _isDead = true;
+            StartCoroutine(Explode());
         }
     }
 
-    private IEnumerator Explosion()
+    private IEnumerator Explode()
     {
-        Collider[] overlapColliders = Physics.OverlapSphere(transform.position, ExplosionRadius, _damagedLayerMask);
+        Collider[] overlapColliders = Physics.OverlapSphere(transform.position, ExplosionRadius, DamagedLayerMask);
         foreach (Collider collider in overlapColliders)
         {
             if (collider.gameObject == gameObject)
+            {
+                continue;
+            }
+
+            if (!collider.gameObject.activeSelf)
             {
                 continue;
             }
@@ -76,7 +81,7 @@ public class Barrel : MonoBehaviour, IDamageable
         effectObject.transform.position = transform.position;
 
         _rigidbody.AddForce(0, FlyingPower, 0, ForceMode.Impulse);
-        _isDead = true;
+        
 
         yield return new WaitForSeconds(LifeTime);
 

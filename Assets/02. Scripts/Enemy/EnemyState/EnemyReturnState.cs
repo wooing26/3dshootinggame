@@ -25,7 +25,7 @@ public class EnemyReturnState : AEnemyState
         }
 
         // 전이 : 시작 위치와 가까워 지면 -> Trace
-        if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) <= _enemy.FindDistance)
+        if (_enemy.IsPlayerInTraceRange())
         {
             Debug.Log("상태전환 : Return -> Trace");
             _enemy.ChangeState(EEnemyState.Trace);
