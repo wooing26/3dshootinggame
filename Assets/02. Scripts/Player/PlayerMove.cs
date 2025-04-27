@@ -8,8 +8,8 @@ public class PlayerMove : MonoBehaviour
     // - 이동 속력
     [Header("플레이어 움직임 데이터")]
     public PlayerMovementDataSO     _movementData;
-    private float                   _currentSpeed = 7f;
     
+    private float                   _currentSpeed = 7f;
     private bool                    _isRun = false;
     private bool                    _isRoll = false;
     private bool                    _canClimb = true;
@@ -17,22 +17,19 @@ public class PlayerMove : MonoBehaviour
     // 구르기 시간
     [SerializeField] private float  rollTime = 0.3f;
     private float                   _currentRollTimer = 0f;
-
-
-    // 스테미나
-    private float                   _stamina = 10f;
     
     // 점프
     private int                     _currentjumpCount = 0;
-
     private const float             GRAVITY = -9.8f;    // 중력가속도
     private float                   _yVelocity = 0f;          // 중력 속도
 
     private CharacterController     _characterController;
+    private Player                  _player;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _player = GetComponent<Player>();
     }
 
     // 구현 순서 : 
@@ -46,9 +43,9 @@ public class PlayerMove : MonoBehaviour
     private void Move()
     {
         // 구르기
-        if (Input.GetKeyDown(KeyCode.E) && _stamina - _movementData.RollStamina >= 0)
+        if (Input.GetKeyDown(KeyCode.E) && _player.CurrentStamina - _movementData.RollStamina >= 0)
         {
-            _stamina -= _movementData.RollStamina;
+            _player.UseStamina(_movementData.RollStamina);
             _isRoll = true;
         }
 
@@ -72,7 +69,6 @@ public class PlayerMove : MonoBehaviour
         Run();
 
         // 2. 입력으로부터 방향을 설정한다.
-        //Vector3 dir = h * transform.right + v * transform.forward;
         Vector3 dir = new Vector3(h, 0, v);
         dir = dir.normalized;
 
@@ -83,7 +79,7 @@ public class PlayerMove : MonoBehaviour
         // 5. 방향에 따라 플레이어를 이동한다.
         _characterController.Move(dir * _currentSpeed * Time.deltaTime);
 
-        UIManager.Instance.RefreshPlayerStaminaSlider(_stamina, _movementData.MaxStamina);
+        UIManager.Instance.RefreshPlayerStaminaSlider(_player.CurrentStamina, _movementData.MaxStamina);
 
     }
 
@@ -100,24 +96,17 @@ public class PlayerMove : MonoBehaviour
             _isRun = false;
             _currentSpeed = _movementData.WalkSpeed;
         }
+        
+        _player.IsRun = _isRun;
 
         if (_isRun && _characterController.velocity != Vector3.zero)
         {
-            _stamina -= _movementData.DecreaseStaminaRate * Time.deltaTime;
+            _player.UseStamina(_movementData.DecreaseStaminaRate * Time.deltaTime);
             
-            if (_stamina <= 0)
+            if (_player.CurrentStamina <= 0)
             {
-                _stamina = 0f;
                 _isRun = false;
                 _currentSpeed = _movementData.WalkSpeed;
-            }
-        }
-        else
-        {
-            _stamina += _movementData.IncreaseStaminaRate * Time.deltaTime;
-            if (_stamina >= _movementData.MaxStamina)
-            {
-                _stamina = _movementData.MaxStamina;
             }
         }
     }
@@ -133,8 +122,7 @@ public class PlayerMove : MonoBehaviour
         }
         _characterController.Move(transform.forward * _movementData.RollSpeed * Time.deltaTime);
 
-        // 스테미나 UI 업데이트
-        UIManager.Instance.RefreshPlayerStaminaSlider(_stamina, _movementData.MaxStamina);
+        
     }
 
     private void Climb(float verticalInput)
@@ -144,8 +132,8 @@ public class PlayerMove : MonoBehaviour
             if (verticalInput != 0)
             {
                 _yVelocity = verticalInput * _movementData.ClimbSpeed * Time.deltaTime;
-                _stamina -= _movementData.ClimbStaminaRate * Time.deltaTime;
-                if (_stamina <= 0)
+                _player.UseStamina(_movementData.ClimbStaminaRate * Time.deltaTime);
+                if (_player.CurrentStamina <= 0)
                 {
                     _canClimb = false;
                 }

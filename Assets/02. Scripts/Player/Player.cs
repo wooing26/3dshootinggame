@@ -1,17 +1,69 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    public int      Health = 100;
+    [Header("체력 관련")]
+    public int      MaxHealth = 100;
+    private int     _currentHealth = 100;
+
+    [Header("스태미나 관련")]
+    public float    MaxStamina = 10f;
+    private float   _currentStamina = 10f;
+    public float    CurrentStamina => _currentStamina;
+
+    public bool     IsRun = false;
+
+    public float    IncreaseStaminaRate = 3f;
+    public float    DecreaseStaminaRate = 1f;
+    public float    RollStaminaCost = 3f;
+    public float    ClimbStaminaRate = 5f;
+
+    private void Awake()
+    {
+        _currentHealth = MaxHealth;
+        _currentStamina = MaxStamina;
+    }
+
+    private void Update()
+    {
+        if (IsRun)
+        {
+            return;
+        }
+        RecoverStamina();
+    }
+
+    public void UseStamina(float amount)
+    {
+        _currentStamina -= amount;
+        _currentStamina = Mathf.Max(_currentStamina, 0);
+        
+        // 스테미나 UI 업데이트
+        UIManager.Instance.RefreshPlayerStaminaSlider(_currentStamina, MaxStamina);
+    }
+
+    private void RecoverStamina()
+    {
+        if (CurrentStamina < MaxStamina)
+        {
+            _currentStamina += IncreaseStaminaRate * Time.deltaTime;
+            _currentStamina = Mathf.Min(CurrentStamina, MaxStamina);
+            // 스테미나 UI 업데이트
+            UIManager.Instance.RefreshPlayerStaminaSlider(_currentStamina, MaxStamina);
+        }
+    }
+
+    [Header("피격 연출 관련")]
     public Image    BloodScreenImage;
     public float    BloodScreenTime = 1f;
 
     private Coroutine _bloodScreenCoroutine;
     public void TakeDamage(Damage damage)
     {
-        Health -= damage.Value;
+        _currentHealth -= damage.Value;
         
         if (_bloodScreenCoroutine != null)
         {
@@ -19,8 +71,8 @@ public class Player : MonoBehaviour, IDamageable
         }
         _bloodScreenCoroutine = StartCoroutine(OnBloodScreen_Coroutine());
         
-        Debug.Log(Health);
-        if (Health <= 0)
+        Debug.Log(_currentHealth);
+        if (_currentHealth <= 0)
         {
             Die();
         }
