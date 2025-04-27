@@ -8,10 +8,17 @@ public class Player : MonoBehaviour, IDamageable
     public Image    BloodScreenImage;
     public float    BloodScreenTime = 1f;
 
+    private Coroutine _bloodScreenCoroutine;
     public void TakeDamage(Damage damage)
     {
         Health -= damage.Value;
-        StartCoroutine(OnBloodScreen());
+        
+        if (_bloodScreenCoroutine != null)
+        {
+            StopCoroutine(_bloodScreenCoroutine);
+        }
+        _bloodScreenCoroutine = StartCoroutine(OnBloodScreen_Coroutine());
+        
         Debug.Log(Health);
         if (Health <= 0)
         {
@@ -24,13 +31,14 @@ public class Player : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
     }
 
-    private IEnumerator OnBloodScreen()
+    private IEnumerator OnBloodScreen_Coroutine()
     {
         BloodScreenImage.gameObject.SetActive(true);
 
         float timer = BloodScreenTime;
         Color color = BloodScreenImage.color;
-        
+        color.a = 1;
+
         while (timer >= 0)
         {
             color.a = timer / BloodScreenTime;

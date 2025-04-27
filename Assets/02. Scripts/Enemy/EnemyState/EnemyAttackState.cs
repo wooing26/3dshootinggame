@@ -30,8 +30,13 @@ public class EnemyAttackState : AEnemyState
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= _enemy.AttackCoolTime)
         {
-            Debug.Log("Attack");
-            
+            Damage damage = new Damage();
+
+            damage.Value = 0;
+            damage.KnockBackPower = 0f;
+            damage.From = _enemy.gameObject;
+
+            _enemy.Player.TakeDamage(damage);
             _attackTimer = 0f;
         }
     }

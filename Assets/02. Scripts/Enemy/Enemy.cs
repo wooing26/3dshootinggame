@@ -24,8 +24,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     // 필요 속성
     // 1. 플레이어(위치)
-    private GameObject                              _player;                            // 플레이어
-    public GameObject                               Player => _player;
+    private Player                                  _player;                            // 플레이어
+    public Player                                   Player => _player;
     
     private CharacterController                     _characterController;               // 캐릭터 컨트롤러
     public CharacterController                      CharacterController => _characterController;
@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
 
         _characterController = GetComponent<CharacterController>();
-        _player = GameObject.FindGameObjectWithTag("Player");
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         _startPosition = transform.position;
     }
 
