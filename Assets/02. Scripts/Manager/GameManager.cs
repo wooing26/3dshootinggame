@@ -16,7 +16,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Start()
     {
-        GameState = EGameState.Ready;
+        ChangeGameState(EGameState.Ready);
     }
 
     private void Update()
@@ -36,5 +36,6 @@ public class GameManager : SingletonBehaviour<GameManager>
     public void ChangeGameState(EGameState gameState)
     {
         GameState = gameState;
+        StartCoroutine(UIManager.Instance.ShowGameState(gameState));
     }
 }

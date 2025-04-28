@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class UIManager : SingletonBehaviour<UIManager>
 
     public TextMeshProUGUI  BulletText;
     public TextMeshProUGUI  BombText;
+    public TextMeshProUGUI  GameStateText;
 
     public Image            ReloadImage;
 
@@ -22,16 +24,33 @@ public class UIManager : SingletonBehaviour<UIManager>
         _player.OnChangePlayerStat += RefreshPlayerSlider;
     }
 
-    private void Update()
+    public IEnumerator ShowGameState(EGameState gameState)
     {
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        string text = "";
+        switch (gameState)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            case EGameState.Ready:
+                {
+                    text = "Ready...";
+                    break;
+                }
+            case EGameState.Run:
+                {
+                    text = "GO!!!";
+                    break;
+                }
+            case EGameState.Over:
+                {
+                    text = "Game Over";
+                    break;
+                }
         }
-        else if (Input.GetKeyUp(KeyCode.LeftAlt))
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+
+        GameStateText.text = text;
+        GameStateText.enabled = true;
+
+        yield return new WaitForSeconds(1f);
+        GameStateText.enabled = false;
     }
 
     public void RefreshPlayerSlider()
