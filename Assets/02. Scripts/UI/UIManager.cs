@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class UIManager : SingletonBehaviour<UIManager>
 {
+    private Player          _player;
+
+    public Slider           PlayerHealthSlider;
     public Slider           PlayerStaminaSlider;
     public Slider           BombThrowPowerSlider;
 
@@ -11,6 +14,13 @@ public class UIManager : SingletonBehaviour<UIManager>
     public TextMeshProUGUI  BombText;
 
     public Image            ReloadImage;
+
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
+        _player.OnChangePlayerStat += RefreshPlayerSlider;
+    }
 
     private void Update()
     {
@@ -24,9 +34,10 @@ public class UIManager : SingletonBehaviour<UIManager>
         }
     }
 
-    public void RefreshPlayerStaminaSlider(float currentStamina, float MaxStamina)
+    public void RefreshPlayerSlider()
     {
-        PlayerStaminaSlider.value = currentStamina / MaxStamina;
+        PlayerHealthSlider.value = (float)_player.CurrentHealth / _player.MaxHealth;
+        PlayerStaminaSlider.value = _player.CurrentStamina / _player.MaxStamina;
     }
 
     public void RefreshBombThrowPowerSlider(float currentThrowPower, float MaxThrowPower)

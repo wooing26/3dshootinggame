@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MonoBehaviour, IDamageable
 {
     [Header("체력 관련")]
     public int      MaxHealth = 100;
     private int     _currentHealth = 100;
+    public int      CurrentHealth => _currentHealth;
 
     [Header("스태미나 관련")]
     public float    MaxStamina = 10f;
@@ -17,9 +18,8 @@ public class Player : MonoBehaviour, IDamageable
     public bool     IsRun = false;
 
     public float    IncreaseStaminaRate = 3f;
-    public float    DecreaseStaminaRate = 1f;
-    public float    RollStaminaCost = 3f;
-    public float    ClimbStaminaRate = 5f;
+
+    public Action   OnChangePlayerStat;
 
     private void Awake()
     {
@@ -40,9 +40,8 @@ public class Player : MonoBehaviour, IDamageable
     {
         _currentStamina -= amount;
         _currentStamina = Mathf.Max(_currentStamina, 0);
-        
-        // 스테미나 UI 업데이트
-        UIManager.Instance.RefreshPlayerStaminaSlider(_currentStamina, MaxStamina);
+
+        OnChangePlayerStat?.Invoke();
     }
 
     private void RecoverStamina()
@@ -51,8 +50,9 @@ public class Player : MonoBehaviour, IDamageable
         {
             _currentStamina += IncreaseStaminaRate * Time.deltaTime;
             _currentStamina = Mathf.Min(CurrentStamina, MaxStamina);
+            
             // 스테미나 UI 업데이트
-            UIManager.Instance.RefreshPlayerStaminaSlider(_currentStamina, MaxStamina);
+            OnChangePlayerStat?.Invoke();
         }
     }
 
@@ -70,8 +70,9 @@ public class Player : MonoBehaviour, IDamageable
             StopCoroutine(_bloodScreenCoroutine);
         }
         _bloodScreenCoroutine = StartCoroutine(OnBloodScreen_Coroutine());
-        
-        Debug.Log(_currentHealth);
+
+        OnChangePlayerStat?.Invoke();
+
         if (_currentHealth <= 0)
         {
             Die();

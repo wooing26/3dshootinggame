@@ -38,8 +38,8 @@ public class CameraRotate : MonoBehaviour
     {
         // 구현 순서
         // 1. 마우스 입력을 받는다. (마우스의 커서의 움직임 방향)
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = InputManager.Instance.GetAxis("Mouse X");
+        float mouseY = InputManager.Instance.GetAxis("Mouse Y");
 
         // 2. 마우스 입력으로부터 회전시킬 방향을 만든다.
         _rotationX += mouseX * RotationSpeed * Time.deltaTime;

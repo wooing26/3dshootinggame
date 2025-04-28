@@ -33,15 +33,15 @@ public class CameraManager : SingletonBehaviour<CameraManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha8))
+        if (InputManager.Instance.GetKeyDown(KeyCode.Alpha8))
         {
             ChangeCameraMode(CameraMode.FPS, FPSTarget);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha9))
         {
             ChangeCameraMode(CameraMode.TPS, TPSTarget);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha0))
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha0))
         {
             ChangeCameraMode(CameraMode.QuarterView, Player);
         }

@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
     private void Move()
     {
         // 구르기
-        if (Input.GetKeyDown(KeyCode.E) && _player.CurrentStamina - _movementData.RollStamina >= 0)
+        if (InputManager.Instance.GetKeyDown(KeyCode.E) && _player.CurrentStamina - _movementData.RollStamina >= 0)
         {
             _player.UseStamina(_movementData.RollStamina);
             _isRoll = true;
@@ -56,8 +56,8 @@ public class PlayerMove : MonoBehaviour
         }
 
         // 1. 키보드 입력을 받는다.
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        float h = InputManager.Instance.GetAxisRaw("Horizontal");
+        float v = InputManager.Instance.GetAxisRaw("Vertical");
 
         // 벽 타기
         if (_canClimb)
@@ -79,14 +79,12 @@ public class PlayerMove : MonoBehaviour
         // 5. 방향에 따라 플레이어를 이동한다.
         _characterController.Move(dir * _currentSpeed * Time.deltaTime);
 
-        UIManager.Instance.RefreshPlayerStaminaSlider(_player.CurrentStamina, _movementData.MaxStamina);
-
     }
 
     private void Run()
     {
         // 달리기
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (InputManager.Instance.GetKey(KeyCode.LeftShift))
         {
             _isRun = true;
             _currentSpeed = _movementData.RunSpeed;
@@ -151,7 +149,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         // 3. 점프 구현
-        if (Input.GetButtonDown("Jump") && _currentjumpCount < _movementData.MaxJumpCount)
+        if (InputManager.Instance.GetButtonDown("Jump") && _currentjumpCount < _movementData.MaxJumpCount)
         {
             _yVelocity = _movementData.JumpPower;
             _currentjumpCount++;

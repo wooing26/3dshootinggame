@@ -44,8 +44,6 @@ public class PlayerFire : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
         BombPool.Instance.SetPoolSize(MaxBombCount);
 
         _fireTimer = FireIntervalTime;
@@ -59,7 +57,7 @@ public class PlayerFire : MonoBehaviour
     {
         // 2. 오른쪽 버튼 입력 받기
         // - 0: 왼쪽, 1: 오른쪽, 2: 휠
-        if (Input.GetMouseButton(1) && _currentBombCount > 0)
+        if (InputManager.Instance.GetMouseButton(1) && _currentBombCount > 0)
         {
             _throwPower += ThrowPowerIncreaseRate * Time.deltaTime;
             if (_throwPower >= MaxThrowPower)
@@ -68,7 +66,7 @@ public class PlayerFire : MonoBehaviour
             }
             UIManager.Instance.RefreshBombThrowPowerSlider(_throwPower, MaxThrowPower);
         }
-        else if (Input.GetMouseButtonUp(1))
+        else if (InputManager.Instance.GetMouseButtonUp(1))
         {
             UseBomb();
             _throwPower = 1f;
@@ -82,7 +80,7 @@ public class PlayerFire : MonoBehaviour
         {
             _fireTimer += Time.deltaTime;
         }
-        else if (Input.GetMouseButton(0))
+        else if (InputManager.Instance.GetMouseButton(0))
         {
             FireBullet();
             _fireTimer = 0f;
@@ -90,7 +88,7 @@ public class PlayerFire : MonoBehaviour
         }
 
         // 재장전
-        if (Input.GetKeyDown(KeyCode.R))
+        if (InputManager.Instance.GetKeyDown(KeyCode.R))
         {
             _isReload = true;
             UIManager.Instance.SetReloadImageActive(true);
