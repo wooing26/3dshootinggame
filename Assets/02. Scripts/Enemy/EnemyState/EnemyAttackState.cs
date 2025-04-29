@@ -32,7 +32,7 @@ public class EnemyAttackState : AEnemyState
         {
             Damage damage = new Damage();
 
-            damage.Value = 0;
+            damage.Value = 10;
             damage.KnockBackPower = 0f;
             damage.From = _enemy.gameObject;
 

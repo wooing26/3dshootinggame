@@ -2,5 +2,8 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void UseWeapon();
+    public void Equip();
+    public void UnEquip();
+
+    public void Attack();
 }

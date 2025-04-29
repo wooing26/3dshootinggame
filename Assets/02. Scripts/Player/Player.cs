@@ -6,26 +6,31 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IDamageable
 {
     [Header("체력 관련")]
-    public int      MaxHealth = 100;
-    private int     _currentHealth = 100;
-    public int      CurrentHealth => _currentHealth;
+    public int                        MaxHealth           = 100;
+    private int                       _currentHealth      = 100;
+    public int                        CurrentHealth       => _currentHealth;
 
     [Header("스태미나 관련")]
-    public float    MaxStamina = 10f;
-    private float   _currentStamina = 10f;
-    public float    CurrentStamina => _currentStamina;
+    public float                      MaxStamina          = 10f;
+    private float                     _currentStamina     = 10f;
+    public float                      CurrentStamina      => _currentStamina;
 
-    public bool     IsRun = false;
+    public bool                       IsRun               = false;
 
-    public float    IncreaseStaminaRate = 3f;
+    public float                      IncreaseStaminaRate = 3f;
 
-    public Action   OnChangePlayerStat;
+    public Action                     OnChangePlayerStat;
+
+    private PlayerAnimationController _animationController;
 
     private void Awake()
     {
         _currentHealth = MaxHealth;
         _currentStamina = MaxStamina;
+        _animationController = GetComponentInChildren<PlayerAnimationController>();
+        _animationController.SetInjureLayerWeight(_currentHealth, MaxHealth);
     }
+
 
     private void Update()
     {
@@ -70,6 +75,8 @@ public class Player : MonoBehaviour, IDamageable
             StopCoroutine(_bloodScreenCoroutine);
         }
         _bloodScreenCoroutine = StartCoroutine(OnBloodScreen_Coroutine());
+
+        _animationController.SetInjureLayerWeight(_currentHealth, MaxHealth);
 
         OnChangePlayerStat?.Invoke();
 

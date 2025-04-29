@@ -7,31 +7,31 @@ public class PlayerMove : MonoBehaviour
     // 필요 속성:
     // - 이동 속력
     [Header("플레이어 움직임 데이터")]
-    public PlayerMovementDataSO     _movementData;
+    public PlayerMovementDataSO             _movementData;
     
-    private float                   _currentSpeed = 7f;
-    private bool                    _isRun = false;
-    private bool                    _isRoll = false;
-    private bool                    _canClimb = true;
+    private float                           _currentSpeed = 7f;
+    private bool                            _isRun = false;
+    private bool                            _isRoll = false;
+    private bool                            _canClimb = true;
 
     // 구르기 시간
-    [SerializeField] private float  rollTime = 0.3f;
-    private float                   _currentRollTimer = 0f;
+    [SerializeField] private float          rollTime = 0.3f;
+    private float                           _currentRollTimer = 0f;
     
     // 점프
-    private int                     _currentjumpCount = 0;
-    private const float             GRAVITY = -9.8f;    // 중력가속도
-    private float                   _yVelocity = 0f;          // 중력 속도
+    private int                             _currentjumpCount = 0;
+    private const float                     GRAVITY = -9.8f;    // 중력가속도
+    private float                           _yVelocity = 0f;          // 중력 속도
 
-    private CharacterController     _characterController;
-    private Player                  _player;
-    private Animator                _animator;
+    private CharacterController             _characterController;
+    private Player                          _player;
+    private PlayerAnimationController       _animationController;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _player = GetComponent<Player>();
-        _animator = GetComponentInChildren<Animator>();
+        _animationController = GetComponentInChildren<PlayerAnimationController>();
     }
 
     // 구현 순서 : 
@@ -74,8 +74,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         // _animator.SetLayerWeight(2, _player.CurrentHealth / _player.MaxHealth);
 
-        _animator.SetFloat("MoveForwardAmount", h);
-        _animator.SetFloat("MoveRightAmount", v);
+        _animationController.SetMoveInput(h, v);
 
         dir = dir.normalized;
 
