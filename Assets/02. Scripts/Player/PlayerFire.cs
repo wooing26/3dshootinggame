@@ -36,9 +36,12 @@ public class PlayerFire : MonoBehaviour
     private LineRenderer    _bulletLineRenderer;
     public float            BulletLineLength = 15f;
 
+    private Animator _animator;
+
     private void Awake()
     {
         _bulletLineRenderer = GetComponent<LineRenderer>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
 
@@ -199,6 +202,8 @@ public class PlayerFire : MonoBehaviour
         {
             StartCoroutine(ShotEffect(hitPosition));
         }
+
+        _animator.SetTrigger("Shot");
 
         // 총 반동
         CameraManager.Instance.Recoil();

@@ -25,11 +25,13 @@ public class PlayerMove : MonoBehaviour
 
     private CharacterController     _characterController;
     private Player                  _player;
+    private Animator                _animator;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _player = GetComponent<Player>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     // 구현 순서 : 
@@ -56,8 +58,8 @@ public class PlayerMove : MonoBehaviour
         }
 
         // 1. 키보드 입력을 받는다.
-        float h = InputManager.Instance.GetAxisRaw("Horizontal");
-        float v = InputManager.Instance.GetAxisRaw("Vertical");
+        float h = InputManager.Instance.GetAxis("Horizontal");
+        float v = InputManager.Instance.GetAxis("Vertical");
 
         // 벽 타기
         if (_canClimb)
@@ -70,6 +72,11 @@ public class PlayerMove : MonoBehaviour
 
         // 2. 입력으로부터 방향을 설정한다.
         Vector3 dir = new Vector3(h, 0, v);
+        // _animator.SetLayerWeight(2, _player.CurrentHealth / _player.MaxHealth);
+
+        _animator.SetFloat("MoveForwardAmount", h);
+        _animator.SetFloat("MoveRightAmount", v);
+
         dir = dir.normalized;
 
         // 2-1. 메인 카메라를 기준으로 방향으로 변환한다.
