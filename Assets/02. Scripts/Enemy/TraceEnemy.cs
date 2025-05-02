@@ -8,6 +8,13 @@ public class TraceEnemy : Enemy
         ChangeState(EEnemyState.Trace);
     }
 
+    protected override void Initialize()
+    {
+        base.Initialize();
+
+        _enemyType = EEnemyType.Trace;
+    }
+
     public override bool IsPlayerInTraceRange()
     {
         return true;

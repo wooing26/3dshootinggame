@@ -22,7 +22,7 @@ public class EnemyDeadState : AEnemyState
         if (_timer >= _enemy.DeathTime)
         {
             // 행동 : 죽는다.
-            _enemy.gameObject.SetActive(false);
+            EnemyPool.Instance.ReleaseEnemy(_enemy.EnemyType, _enemy.gameObject);
         }
     }
 }

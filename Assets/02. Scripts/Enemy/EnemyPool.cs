@@ -3,49 +3,74 @@ using UnityEngine;
 
 public class EnemyPool : SingletonBehaviour<EnemyPool>
 {
-    public List<GameObject>         EnemyPrefabs;
-    public int                      PoolCount = 10;
-
-    private List<List<GameObject>>  _enemyPools;
-
-    private void Awake()
+    [System.Serializable]
+    public class Pool
     {
-        _enemyPools = new List<List<GameObject>>();
+        public EEnemyType type;
+        public GameObject prefab;
+        public int        size;
+    }
 
-        foreach (var prefab in EnemyPrefabs)
+    public List<Pool>                                 EnemyPrefabs;
+
+    private Dictionary<EEnemyType, Queue<GameObject>> _enemyPoolDictionary;
+
+    private void Start()
+    {
+        _enemyPoolDictionary = new Dictionary<EEnemyType, Queue<GameObject>>();
+
+        foreach (Pool pool in EnemyPrefabs)
         {
-            List<GameObject> pool = new List<GameObject>();
-            for (int i = 0; i < PoolCount; i++)
+            Queue<GameObject> enemyPool = new Queue<GameObject>();
+            
+            for (int i = 0; i < pool.size; i++)
             {
-                GameObject obj = Instantiate(prefab);
-                obj.SetActive(false);
-                pool.Add(obj);
+                GameObject enemy = Instantiate(pool.prefab);
+                enemy.transform.SetParent(this.transform);
+                enemy.SetActive(false);
+                enemyPool.Enqueue(enemy);
             }
-            _enemyPools.Add(pool);
+
+            _enemyPoolDictionary.Add(pool.type, enemyPool);
         }
     }
 
-    public GameObject GetEnemy(int typeIndex)
+    public GameObject GetEnemy(EEnemyType type)
     {
-        if (typeIndex < 0 || typeIndex >= _enemyPools.Count)
+        if (_enemyPoolDictionary.TryGetValue(type, out Queue<GameObject> enemyPool))
         {
-            Debug.LogWarning("Invalid enemy type index.");
-            return null;
-        }
-
-        foreach (var enemy in _enemyPools[typeIndex])
-        {
-            if (!enemy.activeInHierarchy)
+            GameObject enemy = null;
+            if (enemyPool.Count > 0)
             {
-                return enemy;
+                enemy = enemyPool.Dequeue();
+                enemy.SetActive(true);
             }
+            else
+            {
+                // 풀에 남는 오브젝트가 없다면 새로 생성
+                int typeIndex = 0;
+                for (int i = 0; i < EnemyPrefabs.Count; i++)
+                {
+                    if (EnemyPrefabs[i].type == type)
+                    {
+                        typeIndex = i;
+                        break;
+                    }
+                }
+
+                enemy = Instantiate(EnemyPrefabs[typeIndex].prefab);
+            }
+
+            return enemy;
         }
 
-        // 풀에 여유 없으면 확장 가능
-        GameObject newEnemy = Instantiate(EnemyPrefabs[typeIndex]);
-        newEnemy.SetActive(false);
-        _enemyPools[typeIndex].Add(newEnemy);
-        return newEnemy;
+        return null;
+    }
+
+    public void ReleaseEnemy(EEnemyType type, GameObject enemy)
+    {
+        enemy.SetActive(false);
+        _enemyPoolDictionary[type].Enqueue(enemy);
     }
 }
 
