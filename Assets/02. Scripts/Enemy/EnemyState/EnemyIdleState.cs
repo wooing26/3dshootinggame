@@ -8,13 +8,11 @@ public class EnemyIdleState : AEnemyState
     {
         base.Enter(enemy);
         _timer = 0f;
-        Debug.Log($"Idle : 이전 위치 : {_enemy.transform.position}");
     }
 
     public override void Exit()
     {
         base.Exit();
-        Debug.Log($"Idle : 이후 위치 : {_enemy.transform.position}");
     }
 
     public override void Update()
