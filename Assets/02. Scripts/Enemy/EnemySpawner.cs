@@ -37,7 +37,9 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 GetRandomSpawnPosition()
     {
         // 예시: 현재 위치 주변 랜덤 반경 5 안
-        return transform.position + Random.insideUnitSphere * RandomSpawnRadius;
+        Vector3 spawnPoint = transform.position + Random.insideUnitSphere * RandomSpawnRadius;
+        spawnPoint.y = 1.5f;
+        return spawnPoint;
     }
 
     private void ScheduleNextSpawn()
@@ -48,10 +50,11 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(EEnemyType type, Vector3 position)
     {
-        GameObject enemy = _enemyPool.GetEnemy(type);
-        if (enemy != null)
+        GameObject enemyObject = _enemyPool.GetEnemy(type);
+        if (enemyObject != null)
         {
-            enemy.transform.position = position;
+            Enemy enemy = enemyObject.GetComponent<Enemy>();
+            enemy.Initialize(position);
         }
     }
 }

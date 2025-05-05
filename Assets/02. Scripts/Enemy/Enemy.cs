@@ -83,20 +83,23 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        Initialize();
-
         ChangeState(EEnemyState.Idle);
     }
 
-    protected virtual void Initialize()
+    public virtual void Initialize(Vector3 spawnPosition)
     {
+        _health = MaxHealth;
+
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = MoveSpeed;
-
+        _agent.Warp(spawnPosition);
 
         _characterController = GetComponent<CharacterController>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        _startPosition = transform.position;
+
+        Debug.Log(spawnPosition);
+        transform.position = spawnPosition;
+        _startPosition = spawnPosition;
     }
 
     private void Update()

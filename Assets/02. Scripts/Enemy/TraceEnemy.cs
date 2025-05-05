@@ -2,17 +2,12 @@ using UnityEngine;
 
 public class TraceEnemy : Enemy
 {
-    private void Start()
-    {
-        Initialize();
-        ChangeState(EEnemyState.Trace);
-    }
 
-    protected override void Initialize()
+    public override void Initialize(Vector3 spawnPoint)
     {
-        base.Initialize();
+        base.Initialize(spawnPoint);
 
-        _enemyType = EEnemyType.Trace;
+        //ChangeState(EEnemyState.Trace);
     }
 
     public override bool IsPlayerInTraceRange()

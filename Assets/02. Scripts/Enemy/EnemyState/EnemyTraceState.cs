@@ -7,15 +7,18 @@ public class EnemyTraceState : AEnemyState
     public override void Enter(Enemy enemy)
     {
         base.Enter(enemy);
+        Debug.Log($"이전 위치 : {_enemy.transform.position}");
     }
 
     public override void Exit()
     {
         base.Exit();
+        Debug.Log($"이후 위치 : {_enemy.transform.position}");
     }
 
     public override void Update()
     {
+        Debug.Log($"중간 위치 : {_enemy.transform.position}");
         // 전이 : 공격 범위 만큼 멀어지면 -> Return
         if (!_enemy.IsPlayerInTraceRange())
         {
@@ -28,6 +31,7 @@ public class EnemyTraceState : AEnemyState
         if (_enemy.IsPlayerInAttackRange())
         {
             Debug.Log("상태전환 : Trace -> Attack");
+            
             _enemy.ChangeState(EEnemyState.Attack);
             return;
         }
