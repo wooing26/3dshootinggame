@@ -2,12 +2,20 @@ using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
-    public Transform    RightHandPosition;
-    public Transform    LeftHandPosition;
+    [Header("IK 손 Transform")]
+    public Transform                  RightHandPosition;
+    public Transform                  LeftHandPosition;
 
-    private Animator    _animator;
-    private int         _layerIndexShot;
-    private int         _layerIndexInjure;
+    private Animator                  _animator;
+    private int                       _layerIndexShot;
+    private int                       _layerIndexInjure;
+
+    [Header("무기별 애니메이터 오버라이드")]
+    public AnimatorOverrideController GunAnimatorOverride;
+    public AnimatorOverrideController SwordAnimatorOverride;
+    public AnimatorOverrideController GrenadeAnimatorOverride;
+    private WeaponType                _currentWeaponType;
+
 
     private void Awake()
     {
@@ -36,6 +44,11 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
+        if (_currentWeaponType != WeaponType.Gun)
+        {
+            return;
+        }
+
         if (layerIndex != _layerIndexShot)
         {
             return;
@@ -54,5 +67,22 @@ public class PlayerAnimationController : MonoBehaviour
 
         _animator.SetIKPosition(AvatarIKGoal.RightHand, RightHandPosition.position);
         _animator.SetIKRotation(AvatarIKGoal.RightHand, RightHandPosition.rotation);
+    }
+
+    public void ChangeWeaponAnimation(WeaponType weaponType)
+    {
+        _currentWeaponType = weaponType;
+        switch (weaponType)
+        {
+            case WeaponType.Gun:
+                _animator.runtimeAnimatorController = GunAnimatorOverride;
+                break;
+            case WeaponType.Knife:
+                _animator.runtimeAnimatorController = SwordAnimatorOverride;
+                break;
+            case WeaponType.Bomb:
+                _animator.runtimeAnimatorController = GrenadeAnimatorOverride;
+                break;
+        }
     }
 }

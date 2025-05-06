@@ -10,19 +10,22 @@ public enum CameraMode
 public class CameraManager : SingletonBehaviour<CameraManager>
 {
     [Header("FPS")]
-    public Transform                        FPSTarget;
+    public Transform                     FPSTarget;
+    public LayerMask                     InVisibleInFPS;
 
     [Header("TPS")]
-    public Transform                        TPSTarget;
+    public Transform                     TPSTarget;
 
     [Header("QuarterView")]
-    public Transform                        Player;
+    public Transform                     Player;
 
-    public CameraMode                       CameraMode = CameraMode.FPS;
-    public Action<CameraMode, Transform>    OnChangeCameraMode;
+    [Header("전체 카메라 설정")]
+    public LayerMask                     DefaultVisibleLayer;
+    public CameraMode                    CameraMode = CameraMode.FPS;
+    public Action<CameraMode, Transform> OnChangeCameraMode;
 
-    private CameraRotate                    _cameraRotate;
-    private CameraFollow                    _cameraFollow;
+    private CameraRotate                 _cameraRotate;
+    private CameraFollow                 _cameraFollow;
 
     private void Start()
     {
@@ -57,6 +60,15 @@ public class CameraManager : SingletonBehaviour<CameraManager>
 
     private void ChangeCameraMode(CameraMode cameraMode, Transform target)
     {
+        if (cameraMode == CameraMode.FPS)
+        {
+            Camera.main.cullingMask &= ~InVisibleInFPS.value;
+        }
+        else
+        {
+            Camera.main.cullingMask = DefaultVisibleLayer.value;
+        }
+
         CameraMode = cameraMode;
         OnChangeCameraMode?.Invoke(cameraMode, target);
     }

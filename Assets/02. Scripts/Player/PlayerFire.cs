@@ -1,5 +1,13 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using VInspector;
+
+public enum WeaponType
+{
+    Gun,
+    Knife,
+    Bomb
+}
 
 public class PlayerFire : MonoBehaviour
 {
@@ -18,20 +26,37 @@ public class PlayerFire : MonoBehaviour
     private PlayerAnimationController _animationController;
 
     [Header("UI")]
-    public GameObject                 UI_SniperZoom;
-    public GameObject                 UI_CrossHair;
+    public GameObject                                           UI_SniperZoom;
+    public GameObject                                           UI_CrossHair;
 
     [Header("조준 모드")]
-    public float                      ZoomInSize             = 15f;
-    public float                      ZoomOutSize            = 60f;
-    private bool                      _zoomMode              = false;
+    public float                                                ZoomInSize             = 15f;
+    public float                                                ZoomOutSize            = 60f;
+    private bool                                                _zoomMode              = false;
+
+
+    [System.Serializable]
+    public class WeaponTypeWeaponPair
+    {
+        public WeaponType  Type;
+        public AWeaponBase Weapon;
+    }
 
     [Header("무기")]
-    public Gun                        Gun;
+    [SerializeField] private List<WeaponTypeWeaponPair>         weaponList;
+    private Dictionary<WeaponType, AWeaponBase>                     _weaponDictionary = new Dictionary<WeaponType, AWeaponBase>();
+    private AWeaponBase                                             _currentWeapon;
+    private WeaponType                                          _currentWeaponType = WeaponType.Gun;
+    
 
     private void Awake()
     {
         _animationController = GetComponentInChildren<PlayerAnimationController>();
+
+        foreach (var weapon in weaponList)
+        {
+            _weaponDictionary[weapon.Type] = weapon.Weapon;
+        }
     }
 
 
@@ -40,8 +65,9 @@ public class PlayerFire : MonoBehaviour
         BombPool.Instance.SetPoolSize(MaxBombCount);
 
         UIManager.Instance.RefreshBombText(_currentBombCount, MaxBombCount);
-        UIManager.Instance.RefreshBulletText(Gun.CurrentAmmo, Gun.MaxAmmo);
         UIManager.Instance.SetReloadImageActive(false);
+
+        EquipWeapon(WeaponType.Gun);
     }
 
     private void Update()
@@ -49,13 +75,17 @@ public class PlayerFire : MonoBehaviour
         HandleZoom();
         HandleFire();
         HandleReload();
-        // Ray : 레이저 (시작 위치, 방향)
-        // RayCast : 레이저를 발사
-        // RaycastHit : 레이저가 물체와 부딛혔다면 그 정보를 저장하는 구조체
+        HandleWeaponSwitch();
+        HandleBombThrow();
     }
 
     private void HandleZoom()
     {
+        if (_currentWeaponType != WeaponType.Gun)
+        {
+            return;
+        }
+
         if (InputManager.Instance.GetMouseButtonDown(1))
         {
             _zoomMode = !_zoomMode;
@@ -70,71 +100,90 @@ public class PlayerFire : MonoBehaviour
     {
         if (InputManager.Instance.GetMouseButton(0))
         {
-            Gun.CancelReload();
-
-            if (Gun.CanFire)
-            {
-                Gun.Attack();
-                _animationController.PlayShotAnimation();
-            }
-            UIManager.Instance.RefreshBulletText(Gun.CurrentAmmo, Gun.MaxAmmo);
+            _currentWeapon.Attack();
+            _animationController.PlayShotAnimation();
         }
     }
 
     private void HandleReload()
     {
+        if (_currentWeaponType != WeaponType.Gun)
+        {
+            return;
+        }
+
         if (InputManager.Instance.GetKeyDown(KeyCode.R))
         {
-            Gun.StartReload();
+            Gun gun = (Gun)_currentWeapon;
+            gun.StartReload();
         }
+    }
+
+    private void HandleWeaponSwitch()
+    {
+        if (InputManager.Instance.GetKeyDown(KeyCode.Alpha1))
+        {
+            EquipWeapon(WeaponType.Gun);
+        }
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha2))
+        {
+            EquipWeapon(WeaponType.Knife);
+        }
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha3))
+        {
+            EquipWeapon(WeaponType.Bomb);
+        }
+    }
+
+    private void EquipWeapon(WeaponType weaponType)
+    {
+        _currentWeaponType = weaponType;
+
+        // 무기 GameObject On/Off
+        if (_currentWeapon != null)
+        {
+            _currentWeapon.UnEquip();
+        }
+
+        _currentWeapon = _weaponDictionary[weaponType];
+        _currentWeapon.Equip();
+
+        // 애니메이터에 무기 타입 전달
+        _animationController.ChangeWeaponAnimation(weaponType);
+
+        // zoom 모드 해제
+        _zoomMode = false;
+        UI_SniperZoom.SetActive(_zoomMode);
+        UI_CrossHair.SetActive(!_zoomMode);
+
+        Camera.main.fieldOfView = ZoomOutSize;
     }
 
     private void HandleBombThrow()
     {
+        if (_currentWeaponType != WeaponType.Bomb)
+        {
+            return;
+        }
+
         // 2. 오른쪽 버튼 입력 받기
         // - 0: 왼쪽, 1: 오른쪽, 2: 휠
-        //if (InputManager.Instance.GetMouseButton(1) && _currentBombCount > 0)
-        //{
-        //    _throwPower += ThrowPowerIncreaseRate * Time.deltaTime;
-        //    if (_throwPower >= MaxThrowPower)
-        //    {
-        //        _throwPower = MaxThrowPower;
-        //    }
-        //    UIManager.Instance.RefreshBombThrowPowerSlider(_throwPower, MaxThrowPower);
-        //}
-        //else if (InputManager.Instance.GetMouseButtonUp(1))
-        //{
-        //    UseBomb();
-        //    _throwPower = 1f;
-        //    UIManager.Instance.RefreshBombThrowPowerSlider(_throwPower, MaxThrowPower);
-        //}
+        BombWeapon bombWeapon = (BombWeapon)_currentWeapon;
+        if (bombWeapon == null) return;
+
+        if (InputManager.Instance.GetMouseButtonDown(0))
+        {
+            bombWeapon.StartCharge();
+        }
+        else if (InputManager.Instance.GetMouseButton(0))
+        {
+            bombWeapon.Charging();
+        }
+        else if (InputManager.Instance.GetMouseButtonUp(0))
+        {
+            bombWeapon.Release();
+        }
     }
 
-    private void UseBomb()
-    {
-        if (_currentBombCount <= 0)
-        {
-            return;
-        }
-
-        // 3. 발사 위치에 수류탄 생성하기
-        Bomb bomb = BombPool.Instance.Create(transform.position);
-
-        // 4. 생성된 수류탄을 카메라 방향으로 물리적인 힘 가하기
-        Rigidbody bombRigidbody = bomb.GetComponent<Rigidbody>();
-        if (bombRigidbody == null)
-        {
-            Destroy(bomb);
-            return;
-        }
-
-        bombRigidbody.linearVelocity = Vector3.zero;
-        bombRigidbody.AddForce(Camera.main.transform.forward * _throwPower, ForceMode.Impulse);
-
-        bombRigidbody.angularVelocity = Vector3.zero;
-        bombRigidbody.AddTorque(Vector3.one);
-
-        _currentBombCount--;
-        UIManager.Instance.RefreshBombText(_currentBombCount, MaxBombCount);
-    }
+    
 }

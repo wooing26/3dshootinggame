@@ -8,6 +8,7 @@ TagManager:
   - FxTemporaire
   - Enemy
   - Barrel
+  - Metal
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Minimap
   - Damageable
   - VFX
-  - 
+  - InVisibleInFPS
   - 
   - 
   - 

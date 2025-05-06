@@ -1,16 +1,27 @@
 using UnityEngine;
 
-public class Knife : MonoBehaviour
+public class Knife : AWeaponBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Transform RightHandTransform;
+    public override void Equip()
     {
-        
+        base.Equip();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UnEquip()
     {
-        
+        base.UnEquip();
     }
+
+    private void Update()
+    {
+        transform.position = RightHandTransform.position;
+    }
+
+    public override void Attack()
+    {
+
+    }
+
+    public override bool CanAttack() => (true);
 }

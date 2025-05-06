@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Gun : MonoBehaviour, IWeapon
+public class Gun : AWeaponBase
 {
     public Transform      FirePosition;
     public Transform      RotatePivot;
@@ -18,7 +18,7 @@ public class Gun : MonoBehaviour, IWeapon
     private float         _lengthFromPivot = 0f;
     private LineRenderer  _bulletLineRenderer;
 
-    public bool           CanFire          => (_fireTimer >= FireIntervalTime && _currentAmmo > 0);
+    public override bool  CanAttack()      => (_fireTimer >= FireIntervalTime && _currentAmmo > 0);
     public bool           IsReloading      => _isReloading;
     public int            CurrentAmmo      => _currentAmmo;
 
@@ -30,13 +30,18 @@ public class Gun : MonoBehaviour, IWeapon
         _currentAmmo = MaxAmmo;
     }
 
-    public void Equip()
+    public override void Equip()
     {
+        base.Equip();
+        
         _bulletLineRenderer.enabled = false;
+        UIManager.Instance.RefreshBulletText(CurrentAmmo, MaxAmmo);
     }
 
-    public void UnEquip()
+    public override void UnEquip()
     {
+        base.UnEquip();
+
         CancelReload();
     }
 
@@ -64,14 +69,26 @@ public class Gun : MonoBehaviour, IWeapon
         }
     }
 
-    public void Attack()
+    public override void Attack()
     {
+        if (_isReloading)
+        {
+            CancelReload();
+        }
+
         // 총알 수 부족 or 총알 쿨 타임
-        if (!CanFire) return;
+        if (!CanAttack()) 
+        { 
+            return;
+        }
 
         // 총알 줄이기, 쿨타임 측정
         _currentAmmo--;
         _fireTimer = 0f;
+
+        // Ray : 레이저 (시작 위치, 방향)
+        // RayCast : 레이저를 발사
+        // RaycastHit : 레이저가 물체와 부딛혔다면 그 정보를 저장하는 구조체
 
         // Ray를 이용한 피격 위치 생성
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -128,7 +145,7 @@ public class Gun : MonoBehaviour, IWeapon
         UIManager.Instance.RefreshReloadImage(_reloadTimer, ReloadTime);
     }
 
-    public void CancelReload()
+    private void CancelReload()
     {
         _isReloading = false;
         UIManager.Instance.SetReloadImageActive(false);
