@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
@@ -16,6 +17,7 @@ public class PlayerAnimationController : MonoBehaviour
     public AnimatorOverrideController GrenadeAnimatorOverride;
     private WeaponType                _currentWeaponType;
 
+    public Action                     OnFireAnimationEnd;
 
     private void Awake()
     {
@@ -84,5 +86,10 @@ public class PlayerAnimationController : MonoBehaviour
                 _animator.runtimeAnimatorController = GrenadeAnimatorOverride;
                 break;
         }
+    }
+
+    public void OnKnfieFireAnimationEnd()
+    {
+        OnFireAnimationEnd?.Invoke();
     }
 }

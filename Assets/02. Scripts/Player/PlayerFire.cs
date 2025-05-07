@@ -98,10 +98,10 @@ public class PlayerFire : MonoBehaviour
 
     private void HandleFire()
     {
-        if (InputManager.Instance.GetMouseButton(0))
+        if (InputManager.Instance.GetMouseButton(0) && _currentWeapon.CanAttack())
         {
             _currentWeapon.Attack();
-            _animationController.PlayShotAnimation();
+            _animationController.PlayShotAnimation();   
         }
     }
 

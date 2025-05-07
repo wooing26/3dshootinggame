@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class Knife : AWeaponBase
 {
-    public Transform RightHandTransform;
+    public Transform                 RightHandTransform;
+    public PlayerAnimationController PlayerAnimationController;
+    private bool                     _isAttackEnd = true;
+
+    private void Start()
+    {
+        PlayerAnimationController.OnFireAnimationEnd += AttackFinish;
+    }
+
     public override void Equip()
     {
         base.Equip();
+        _isAttackEnd = true;
     }
 
     public override void UnEquip()
@@ -16,12 +25,23 @@ public class Knife : AWeaponBase
     private void Update()
     {
         transform.position = RightHandTransform.position;
+        transform.forward = RightHandTransform.up;
     }
 
     public override void Attack()
     {
+        if (!_isAttackEnd)
+        {
+            return;
+        }
+        _isAttackEnd = false;
 
     }
 
-    public override bool CanAttack() => (true);
+    private void AttackFinish()
+    {
+        _isAttackEnd = true;
+    }
+
+    public override bool CanAttack() => (_isAttackEnd);
 }
