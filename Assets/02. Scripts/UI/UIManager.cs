@@ -18,8 +18,6 @@ public class UIManager : SingletonBehaviour<UIManager>
     public Image           ReloadImage;
     public Image           CrosshairImage;
 
-    public GameObject      OptionPopup;
-
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -90,10 +88,5 @@ public class UIManager : SingletonBehaviour<UIManager>
     public void SetCrosshairImageActive(bool active)
     {
         CrosshairImage.enabled = active;
-    }
-
-    public void SetOptionPopupActive(bool active)
-    {
-        OptionPopup.SetActive(active);
     }
 }

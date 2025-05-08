@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
 using System;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using UnityEditor.Build;
 
 namespace Quixel {
     public class MegascansUtilities : MonoBehaviour {
@@ -337,15 +338,17 @@ namespace Quixel {
 #endif
         */
         public static void AddDefineIfNecessary (string _define, BuildTargetGroup _buildTargetGroup) {
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup (_buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(_buildTargetGroup);
+            var defines = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
 
             if (defines == null) { defines = _define; } else if (defines.Length == 0) { defines = _define; } else { if (defines.IndexOf (_define, 0) < 0) { defines += ";" + _define; } }
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup (_buildTargetGroup, defines);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, defines);
         }
 
         public static void RemoveDefineIfNecessary (string _define, BuildTargetGroup _buildTargetGroup) {
-            var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup (_buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(_buildTargetGroup);
+            var defines = PlayerSettings.GetScriptingDefineSymbols (namedBuildTarget);
 
             if (defines.StartsWith (_define + ";")) {
                 // First of multiple defines.
@@ -362,7 +365,7 @@ namespace Quixel {
                 if (index >= 0) { defines = defines.Remove (index, _define.Length + 1); }
             }
 
-            PlayerSettings.SetScriptingDefineSymbolsForGroup (_buildTargetGroup, defines);
+            PlayerSettings.SetScriptingDefineSymbols (namedBuildTarget, defines);
         }
         #endregion
 

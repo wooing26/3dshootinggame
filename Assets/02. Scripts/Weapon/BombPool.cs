@@ -4,8 +4,13 @@ using UnityEngine;
 public class BombPool : SingletonBehaviour<BombPool>
 {
     public GameObject        BombPrefab;
-
+    public int               PoolSize = 3;
     private List<GameObject> _bombs;
+
+    private void Start()
+    {
+        SetPoolSize(PoolSize);
+    }
 
     public void SetPoolSize(int poolSize)
     {

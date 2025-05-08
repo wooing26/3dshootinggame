@@ -17640,6 +17640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BombPrefab: {fileID: 7215371923951395175, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+  PoolSize: 3
 --- !u!4 &678896237
 Transform:
   m_ObjectHideFlags: 0
@@ -18225,6 +18226,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fc29f19673d9e049ab514733b796056, type: 3}
+--- !u!1001 &693586373
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.592
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.242
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762662556414260313, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215371923951395175, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
+      propertyPath: m_Name
+      value: Bomb
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2fc795e3eb2c6614185c7bc288d3e9a1, type: 3}
 --- !u!1001 &706815443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25655,7 +25713,6 @@ MonoBehaviour:
   GameStateText: {fileID: 132169527}
   ReloadImage: {fileID: 10538119}
   CrosshairImage: {fileID: 789452742}
-  OptionPopup: {fileID: 1186928785}
 --- !u!1001 &1002024678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30404,6 +30461,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38b6766271a9edb438483bee9eef2282, type: 3}
+--- !u!1 &1191425977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1191425978}
+  - component: {fileID: 1191425979}
+  m_Layer: 3
+  m_Name: BombWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1191425978
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191425977}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1822368405}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1191425979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191425977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620cf6d0c94692c4590bc2a82232429e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ThrowPosition: {fileID: 1476485952}
+  MinThrowPower: 5
+  MaxThrowPower: 15
+  ChargeRate: 10
+  MaxBombCount: 3
 --- !u!1001 &1192283460
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59115,6 +59221,10 @@ PrefabInstance:
       propertyPath: weaponList.Array.data[1].Weapon
       value: 
       objectReference: {fileID: 1417537652}
+    - target: {fileID: 139006671406148112, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
+      propertyPath: weaponList.Array.data[2].Weapon
+      value: 
+      objectReference: {fileID: 1191425979}
     - target: {fileID: 308626284971037805, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -59335,6 +59445,10 @@ PrefabInstance:
       propertyPath: SwordAnimatorOverride
       value: 
       objectReference: {fileID: 22100000, guid: 9a66d2018e9ceda49b57d35bf2014897, type: 2}
+    - target: {fileID: 1930781078859128956, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
+      propertyPath: GrenadeAnimatorOverride
+      value: 
+      objectReference: {fileID: 22100000, guid: ef13a8af639edb54385c778a568ae1c7, type: 2}
     - target: {fileID: 1951543774781160926, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -59920,6 +60034,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3467269529467587433, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4219355846384732}
+    - targetCorrespondingSourceObject: {fileID: 3467269529467587433, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1191425978}
     - targetCorrespondingSourceObject: {fileID: 7064726931839972193, guid: 93e12a411e04e82448ae1ceb408a9d06, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1476485952}
@@ -63961,5 +64078,6 @@ SceneRoots:
   - {fileID: 1738133399}
   - {fileID: 487038360}
   - {fileID: 678896237}
+  - {fileID: 693586373}
   - {fileID: 5027859226802903837}
   - {fileID: 1875813737}

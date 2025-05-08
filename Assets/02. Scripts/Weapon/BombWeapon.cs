@@ -8,26 +8,49 @@ public class BombWeapon : AWeaponBase
     public float     ChargeRate         = 10f;
     public int       MaxBombCount       = 3;
 
+    private Bomb     _currentBomb       = null;
+
     private float    _currentThrowPower = 0f;
-    private int      _currentCount;
+    private int      _currentBombCount;
     private bool     _isCharging        = false;
 
     private void Awake()
     {
-        _currentCount = MaxBombCount;
+        _currentBombCount = MaxBombCount;
+    }
 
+    private void Start()
+    {
+        UIManager.Instance.RefreshBombText(_currentBombCount, MaxBombCount);
+    }
+
+    private void Update()
+    {
+        if (_currentBomb == null)
+        {
+            return;
+        }
+
+        _currentBomb.transform.position = ThrowPosition.position;
     }
 
     public override void Equip()
     {
         base.Equip();
+        if (!CanAttack())
+        {
+            return;
+        }
 
+        _currentBomb = BombPool.Instance.Create(ThrowPosition.position);
     }
+
     public override void UnEquip()
     {
         base.UnEquip();
 
     }
+
     public void StartCharge()
     {
         if (!CanAttack())
@@ -64,13 +87,12 @@ public class BombWeapon : AWeaponBase
 
         _isCharging = false;
 
-        Bomb bomb = BombPool.Instance.Create(ThrowPosition.position);
-        if (bomb == null)
+        if (_currentBomb == null)
         {
             return;
         }
 
-        Rigidbody bombRigidbody = bomb.GetComponent<Rigidbody>();
+        Rigidbody bombRigidbody = _currentBomb.GetComponent<Rigidbody>();
         if (bombRigidbody == null)
         {
             return;
@@ -82,14 +104,16 @@ public class BombWeapon : AWeaponBase
         bombRigidbody.AddForce(Camera.main.transform.forward * _currentThrowPower, ForceMode.Impulse);
         bombRigidbody.AddTorque(Vector3.one);
         
-        _currentCount--;
+        _currentBombCount--;
         _currentThrowPower = MinThrowPower;
 
-        UIManager.Instance.RefreshBombText(_currentCount, MaxBombCount);
+        _currentBomb = null;
+
+        UIManager.Instance.RefreshBombText(_currentBombCount, MaxBombCount);
         UIManager.Instance.RefreshBombThrowPowerSlider(_currentThrowPower, MaxThrowPower);
     }
 
     public override void Attack() { } // 사용 안함
 
-    public override bool CanAttack() => _currentCount > 0;
+    public override bool CanAttack() => _currentBombCount > 0 && !_isCharging;
 }

@@ -11,17 +11,6 @@ public enum WeaponType
 
 public class PlayerFire : MonoBehaviour
 {
-    // 필요 속성
-    // - 던지는 힘
-    [Header("수류탄")]
-    public float                      MaxThrowPower          = 15f;
-    public float                      ThrowPowerIncreaseRate = 2f;
-    private float                     _throwPower            = 1f;
-
-    // - 폭탄 최대 개수
-    public int                        MaxBombCount           = 3;
-    private int                       _currentBombCount      = 3;
-
     // 목표 : 마우스의 왼쪽 버튼을 누르면 카메라가 바라보는 방향으로 총을 발사하고 싶다.
     private PlayerAnimationController _animationController;
 
@@ -62,9 +51,6 @@ public class PlayerFire : MonoBehaviour
 
     private void Start()
     {
-        BombPool.Instance.SetPoolSize(MaxBombCount);
-
-        UIManager.Instance.RefreshBombText(_currentBombCount, MaxBombCount);
         UIManager.Instance.SetReloadImageActive(false);
 
         EquipWeapon(WeaponType.Gun);
