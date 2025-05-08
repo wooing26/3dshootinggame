@@ -27,7 +27,7 @@ public class PlayerAnimationController : MonoBehaviour
     }
 
     // 이동 입력 전달
-    public void SetMoveInput(float moveForward, float moveRight)
+    public void SetMoveInput(float moveRight, float moveForward)
     {
         _animator.SetFloat("MoveForwardAmount", moveForward);
         _animator.SetFloat("MoveRightAmount", moveRight);

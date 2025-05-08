@@ -5,17 +5,20 @@ using UnityEngine.UI;
 
 public class UIManager : SingletonBehaviour<UIManager>
 {
-    private Player          _player;
+    private Player         _player;
 
-    public Slider           PlayerHealthSlider;
-    public Slider           PlayerStaminaSlider;
-    public Slider           BombThrowPowerSlider;
+    public Slider          PlayerHealthSlider;
+    public Slider          PlayerStaminaSlider;
+    public Slider          BombThrowPowerSlider;
 
-    public TextMeshProUGUI  BulletText;
-    public TextMeshProUGUI  BombText;
-    public TextMeshProUGUI  GameStateText;
+    public TextMeshProUGUI BulletText;
+    public TextMeshProUGUI BombText;
+    public TextMeshProUGUI GameStateText;
 
-    public Image            ReloadImage;
+    public Image           ReloadImage;
+    public Image           CrosshairImage;
+
+    public GameObject      OptionPopup;
 
     private void Start()
     {
@@ -82,5 +85,15 @@ public class UIManager : SingletonBehaviour<UIManager>
     public void SetReloadImageActive(bool active)
     {
         ReloadImage.enabled = active;
+    }
+
+    public void SetCrosshairImageActive(bool active)
+    {
+        CrosshairImage.enabled = active;
+    }
+
+    public void SetOptionPopupActive(bool active)
+    {
+        OptionPopup.SetActive(active);
     }
 }

@@ -91,6 +91,7 @@ public class CameraRotate : MonoBehaviour
     private void QuarterViewRotate()
     {
         transform.LookAt(_target);
+        _rotationY = 0f;
     }
 
     public void Recoil()

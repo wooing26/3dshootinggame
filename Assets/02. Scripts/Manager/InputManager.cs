@@ -5,23 +5,47 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
+        ChangeCursorState(false);
+        CameraManager.Instance.OnChangeCameraMode += ChangeCameraMode;
+    }
+
+    private void ChangeCameraMode(CameraMode cameraMode, Transform target)
+    {
+        ChangeCursorState(cameraMode == CameraMode.QuarterView);
+    }
+
+    private void ChangeCursorState(bool isVisible)
+    {
+        Cursor.visible = isVisible;
+        if (isVisible)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            ChangeCursorState(true);
         }
         else if (Input.GetKeyUp(KeyCode.LeftAlt))
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            ChangeCursorState(false);
         }
+    }
+
+    public Vector2 GetMousePositionFromCenter()
+    {
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+        Vector2 mousePosition = Input.mousePosition;
+
+        return mousePosition - screenCenter;
     }
 
     public float GetAxis(string axis)
@@ -56,7 +80,7 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     public bool GetKeyDown(KeyCode keyCode)
     {
-        if (GameManager.Instance.GameState != EGameState.Run)
+        if (GameManager.Instance.GameState == EGameState.Ready || GameManager.Instance.GameState == EGameState.Over)
         {
             return false;
         }

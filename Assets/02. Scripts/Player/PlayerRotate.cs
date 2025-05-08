@@ -8,6 +8,13 @@ public class PlayerRotate : MonoBehaviour
 
     private void Update()
     {
+        if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
+        {
+            Vector2 mousePosition = InputManager.Instance.GetMousePositionFromCenter();
+
+            transform.forward = new Vector3(mousePosition.x, transform.position.y, mousePosition.y);
+            return;
+        }
         float mouseX = InputManager.Instance.GetAxis("Mouse X");
 
         _rotationX += mouseX * RotationSpeed * Time.deltaTime;

@@ -47,7 +47,16 @@ public class Gun : AWeaponBase
 
     private void Update()
     {
-        RotatePivot.transform.forward = Camera.main.transform.forward;
+        if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
+        {
+            Vector2 mousePosition = InputManager.Instance.GetMousePositionFromCenter();
+
+            RotatePivot.transform.forward = new Vector3(mousePosition.x, RotatePivot.transform.position.y, mousePosition.y);
+        }
+        else
+        {
+            RotatePivot.transform.forward = Camera.main.transform.forward;
+        }
         transform.position = RotatePivot.transform.position + RotatePivot.transform.forward * _lengthFromPivot;
         transform.forward = RotatePivot.transform.forward;
 

@@ -69,6 +69,15 @@ public class CameraManager : SingletonBehaviour<CameraManager>
             Camera.main.cullingMask = DefaultVisibleLayer.value;
         }
 
+        if (cameraMode == CameraMode.QuarterView)
+        {
+            UIManager.Instance.SetCrosshairImageActive(false);
+        }
+        else
+        {
+            UIManager.Instance.SetCrosshairImageActive(true);
+        }
+
         CameraMode = cameraMode;
         OnChangeCameraMode?.Invoke(cameraMode, target);
     }

@@ -87,7 +87,7 @@ AnimatorStateMachine:
     m_Position: {x: 350, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2919852780880397287}
-    m_Position: {x: 350, y: 180, z: 0}
+    m_Position: {x: 350, y: 140, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -363,8 +363,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveAmount
     m_Mirror: 0
-  m_BlendParameter: MoveForwardAmount
-  m_BlendParameterY: MoveRightAmount
+  m_BlendParameter: MoveRightAmount
+  m_BlendParameterY: MoveForwardAmount
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
