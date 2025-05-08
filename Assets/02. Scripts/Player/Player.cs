@@ -28,6 +28,10 @@ public class Player : MonoBehaviour, IDamageable
         _currentHealth = MaxHealth;
         _currentStamina = MaxStamina;
         _animationController = GetComponentInChildren<PlayerAnimationController>();
+    }
+
+    private void Start()
+    {
         _animationController.SetInjureLayerWeight(_currentHealth, MaxHealth);
     }
 

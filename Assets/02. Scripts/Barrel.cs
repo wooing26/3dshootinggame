@@ -38,7 +38,6 @@ public class Barrel : MonoBehaviour, IDamageable
         Health -= damage.Value;
 
         _rigidbody.AddForceAtPosition(damage.HitDirection * damage.KnockBackPower, damage.HitPoint, ForceMode.Impulse);
-        Debug.Log(Health);
         if (Health <= 0)
         {
             _isDead = true;

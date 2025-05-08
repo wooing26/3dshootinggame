@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6458181916529026574}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 191911319011307706, guid: 1d5ad1a2b94919a43bd7c84ec5597826, type: 3}
 --- !u!23 &96152540521829661
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 18120575b9c758d4daf2dea9fd78ca85, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -136,10 +136,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 0.5811963
+  m_Height: 1.7498314
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: -0.0020490289, y: 0.87041295, z: 0.00012603402}
 --- !u!114 &3088609802547151712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,9 +171,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.6, y: 0.87500006, z: 0.58100003}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.002, y: 0.87000006, z: 0}
   m_TimeToStationary: 0
