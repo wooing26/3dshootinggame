@@ -34,9 +34,9 @@ public class BombWeapon : AWeaponBase
         _currentBomb.transform.position = ThrowPosition.position;
     }
 
-    public override void Equip()
+    public override void Equip(Player player)
     {
-        base.Equip();
+        base.Equip(player);
         if (!CanAttack())
         {
             return;

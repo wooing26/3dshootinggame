@@ -36,7 +36,7 @@ public class Barrel : MonoBehaviour, IDamageable
         }
 
         Health -= damage.Value;
-
+        Debug.Log(Health);
         _rigidbody.AddForceAtPosition(damage.HitDirection * damage.KnockBackPower, damage.HitPoint, ForceMode.Impulse);
         if (Health <= 0)
         {

@@ -12,16 +12,17 @@ public enum WeaponType
 public class PlayerFire : MonoBehaviour
 {
     // 목표 : 마우스의 왼쪽 버튼을 누르면 카메라가 바라보는 방향으로 총을 발사하고 싶다.
+    private Player                    _player;
     private PlayerAnimationController _animationController;
 
     [Header("UI")]
-    public GameObject                                           UI_SniperZoom;
-    public GameObject                                           UI_CrossHair;
+    public GameObject                 UI_SniperZoom;
+    public GameObject                 UI_CrossHair;
 
     [Header("조준 모드")]
-    public float                                                ZoomInSize             = 15f;
-    public float                                                ZoomOutSize            = 60f;
-    private bool                                                _zoomMode              = false;
+    public float                      ZoomInSize  = 15f;
+    public float                      ZoomOutSize = 60f;
+    private bool                      _zoomMode   = false;
 
 
     [System.Serializable]
@@ -33,13 +34,14 @@ public class PlayerFire : MonoBehaviour
 
     [Header("무기")]
     [SerializeField] private List<WeaponTypeWeaponPair>         weaponList;
-    private Dictionary<WeaponType, AWeaponBase>                     _weaponDictionary = new Dictionary<WeaponType, AWeaponBase>();
-    private AWeaponBase                                             _currentWeapon;
+    private Dictionary<WeaponType, AWeaponBase>                 _weaponDictionary = new Dictionary<WeaponType, AWeaponBase>();
+    private AWeaponBase                                         _currentWeapon;
     private WeaponType                                          _currentWeaponType = WeaponType.Gun;
     
 
     private void Awake()
     {
+        _player = GetComponent<Player>();
         _animationController = GetComponentInChildren<PlayerAnimationController>();
 
         foreach (var weapon in weaponList)
@@ -132,7 +134,7 @@ public class PlayerFire : MonoBehaviour
         }
 
         _currentWeapon = _weaponDictionary[weaponType];
-        _currentWeapon.Equip();
+        _currentWeapon.Equip(_player);
 
         // 애니메이터에 무기 타입 전달
         _animationController.ChangeWeaponAnimation(weaponType);

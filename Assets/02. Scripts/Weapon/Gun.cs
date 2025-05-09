@@ -30,10 +30,10 @@ public class Gun : AWeaponBase
         _currentAmmo = MaxAmmo;
     }
 
-    public override void Equip()
+    public override void Equip(Player player)
     {
-        base.Equip();
-        
+        base.Equip(player);
+
         _bulletLineRenderer.enabled = false;
         UIManager.Instance.RefreshBulletText(CurrentAmmo, MaxAmmo);
     }
