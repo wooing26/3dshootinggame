@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
@@ -166,6 +167,7 @@ public class PlayerFire : MonoBehaviour
         else if (InputManager.Instance.GetMouseButton(0))
         {
             bombWeapon.Charging();
+            
         }
         else if (InputManager.Instance.GetMouseButtonUp(0))
         {

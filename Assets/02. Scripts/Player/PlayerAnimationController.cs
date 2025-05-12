@@ -39,6 +39,11 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetTrigger("Shot");
     }
 
+    public void SetStopFlag(bool isStop)
+    {
+        _animator.SetFloat("Stop", isStop ? 1f : 0f);
+    }
+
     public void SetInjureLayerWeight(float currentHealth, float maxHealth)
     {
         _animator.SetLayerWeight(_layerIndexInjure, (maxHealth - currentHealth) / maxHealth);

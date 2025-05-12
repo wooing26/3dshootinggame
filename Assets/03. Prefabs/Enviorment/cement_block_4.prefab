@@ -70,11 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 5258421689547706953, guid: bcfa7d7d41ddf4344b293addf92f3661, type: 3}
     - target: {fileID: 919132149155446097, guid: 0559da7e55df1bb4493a8a8441c2afe4, type: 3}
       propertyPath: m_Name
-      value: cement_block_121
+      value: cement_block_4
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0559da7e55df1bb4493a8a8441c2afe4, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

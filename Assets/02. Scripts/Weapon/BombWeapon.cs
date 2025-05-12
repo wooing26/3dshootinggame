@@ -80,7 +80,7 @@ public class BombWeapon : AWeaponBase
 
     public void Release()
     {
-        if (!_isCharging || !CanAttack())
+        if (!CanAttack())
         {
             return;
         }
