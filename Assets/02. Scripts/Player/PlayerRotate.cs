@@ -8,16 +8,17 @@ public class PlayerRotate : MonoBehaviour
 
     private void Update()
     {
+        float mouseX = InputManager.Instance.GetAxis("Mouse X");
+
+        _rotationX += mouseX * RotationSpeed * Time.deltaTime;
+
         if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
         {
             Vector2 mousePosition = InputManager.Instance.GetMousePositionFromCenter();
 
-            transform.forward = new Vector3(mousePosition.x, transform.position.y, mousePosition.y);
+            transform.forward = new Vector3(mousePosition.x, 0, mousePosition.y).normalized;
             return;
         }
-        float mouseX = InputManager.Instance.GetAxis("Mouse X");
-
-        _rotationX += mouseX * RotationSpeed * Time.deltaTime;
 
         transform.eulerAngles = new Vector3(0, _rotationX, 0);
     }

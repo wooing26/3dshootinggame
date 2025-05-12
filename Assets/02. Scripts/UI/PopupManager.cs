@@ -33,7 +33,7 @@ public class PopupManager : SingletonBehaviour<PopupManager>
 
     private void Update()
     {
-        if (InputManager.Instance.GetKeyDown(KeyCode.Backspace))
+        if (InputManager.Instance.GetKeyDown(KeyCode.Escape))
         {
             if (_openedPopups.Count == 0)
             {
