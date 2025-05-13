@@ -150,6 +150,7 @@ public class PlayerMove : MonoBehaviour
         // 캐릭터가 땅 위에 있다면...
         if (_characterController.isGrounded)
         {
+            _yVelocity = -2f;
             _currentjumpCount = 0;
             _canClimb = true;
         }
