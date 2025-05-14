@@ -47,8 +47,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         _gameState = EGameState.Pause;
         Time.timeScale = 0;
 
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        InputManager.Instance.ChangeCursorState(true);
 
         PopupManager.Instance.Open(EPopupType.UI_OptionPopup, closeCallback: Continue);
     }
@@ -58,8 +57,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         _gameState = EGameState.Run;
         Time.timeScale = 1;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        InputManager.Instance.ChangeCursorState(CameraManager.Instance.CameraMode == CameraMode.QuarterView);
     }
 
     public void Restart()
@@ -67,8 +65,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         _gameState = EGameState.Run;
         Time.timeScale = 1;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        InputManager.Instance.ChangeCursorState(false);
 
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);

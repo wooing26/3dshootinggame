@@ -16,6 +16,11 @@ public class PlayerRotate : MonoBehaviour
         {
             Vector2 mousePosition = InputManager.Instance.GetMousePositionFromCenter();
 
+            if (mousePosition == Vector2.zero)
+            {
+                return;
+            }
+
             transform.forward = new Vector3(mousePosition.x, 0, mousePosition.y).normalized;
             return;
         }

@@ -50,8 +50,12 @@ public class Gun : AWeaponBase
         if (CameraManager.Instance.CameraMode == CameraMode.QuarterView)
         {
             Vector2 mousePosition = InputManager.Instance.GetMousePositionFromCenter();
-
-            RotatePivot.transform.forward = new Vector3(mousePosition.x, RotatePivot.transform.position.y, mousePosition.y);
+            if (mousePosition == Vector2.zero)
+            {
+                return;
+            }
+            
+            RotatePivot.transform.forward = new Vector3(mousePosition.x, 0, mousePosition.y).normalized;
         }
         else
         {

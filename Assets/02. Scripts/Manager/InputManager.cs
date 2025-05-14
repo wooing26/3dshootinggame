@@ -14,7 +14,7 @@ public class InputManager : SingletonBehaviour<InputManager>
         ChangeCursorState(cameraMode == CameraMode.QuarterView);
     }
 
-    private void ChangeCursorState(bool isVisible)
+    public void ChangeCursorState(bool isVisible)
     {
         Cursor.visible = isVisible;
         if (isVisible)
@@ -41,6 +41,10 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     public Vector2 GetMousePositionFromCenter()
     {
+        if (GameManager.Instance.GameState != EGameState.Run)
+        {
+            return Vector2.zero;
+        }
         Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
         Vector2 mousePosition = Input.mousePosition;

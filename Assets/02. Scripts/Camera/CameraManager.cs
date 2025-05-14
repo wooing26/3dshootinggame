@@ -48,8 +48,6 @@ public class CameraManager : SingletonBehaviour<CameraManager>
         {
             ChangeCameraMode(CameraMode.QuarterView, Player);
         }
-
-        
     }
 
     private void LateUpdate()
