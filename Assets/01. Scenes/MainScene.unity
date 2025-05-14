@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 410087040}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10420,7 +10420,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.43660998, g: 0.59584713, b: 0.995283, a: 1}
-  m_Intensity: 2
+  m_Intensity: 5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -33392,10 +33392,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel_2
       objectReference: {fileID: 0}
-    - target: {fileID: 6458181916529026574, guid: fbc4580cd8869134f9006964e0e3e99e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -54984,7 +54980,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 851794385419833972}
   m_FillRect: {fileID: 851794386217155304}
   m_HandleRect: {fileID: 0}
@@ -55366,7 +55362,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 851794387027318723}
   m_FillRect: {fileID: 851794385629970384}
   m_HandleRect: {fileID: 0}
@@ -58314,10 +58310,6 @@ PrefabInstance:
     - target: {fileID: 6458181916529026574, guid: fbc4580cd8869134f9006964e0e3e99e, type: 3}
       propertyPath: m_Name
       value: Barrel
-      objectReference: {fileID: 0}
-    - target: {fileID: 6458181916529026574, guid: fbc4580cd8869134f9006964e0e3e99e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -63377,6 +63369,10 @@ PrefabInstance:
     - target: {fileID: 599320355798179904, guid: b4fd17c59cdaada4a8da1368badd15bd, type: 3}
       propertyPath: m_Name
       value: ruin_building_8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392116685895188885, guid: b4fd17c59cdaada4a8da1368badd15bd, type: 3}
+      propertyPath: m_ReceiveGI
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
