@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using VInspector;
 
 public class Player : MonoBehaviour, IDamageable
 {
